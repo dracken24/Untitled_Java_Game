@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Debug Raylib App",
+            "request": "launch",
+            "mainClass": "App",
+            "vmArgs": "--enable-native-access=ALL-UNNAMED --enable-preview",
+            "classpath": [
+                "${workspaceFolder}/bin",
+                "${workspaceFolder}/jaylib-ffm-5.5.0-2.jar"
+            ],
+            "preLaunchTask": "compile",
+            "sourcePaths": [
+                "${workspaceFolder}/src"
+            ],
+            "projectName": "RaylibProject"
+        }
+    ]
+} 
