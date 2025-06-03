@@ -1,5 +1,5 @@
 {
-    // "workbench.colorTheme": "Aura Dark",
+    "workbench.colorTheme": "Aura Dark",
     "editor.minimap.enabled": true,
     "terminal.integrated.shell.windows": "c:/Program Files/PowerShell/7/pwsh.exe",
     "terminal.integrated.fontWeight": "1",
