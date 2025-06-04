@@ -32,6 +32,7 @@ public class PlayerMovement
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
 
+    SpriteSheet	idle;
     SpriteSheet	up;
     SpriteSheet	down;
     SpriteSheet	left;
@@ -40,11 +41,7 @@ public class PlayerMovement
     SpriteSheet	attack01;
     SpriteSheet	attack02;
     SpriteSheet	attack03;
-    SpriteSheet	idle;
-    SpriteSheet	jump;
-    SpriteSheet	fall;
-    SpriteSheet	run;
-    SpriteSheet	walk;
+
     SpriteSheet	death;
     SpriteSheet	hurt;
 
@@ -176,6 +173,12 @@ public class PlayerMovement
         {
             this.actionInProgress = SpriteMovement.IDLE;
         }
+        
+        if (isWallCollide)
+        {
+            velocity.setX(0);
+            velocity.setY(0);
+        }
 	}
 
 /***********************************************************************************/
@@ -220,22 +223,7 @@ public class PlayerMovement
     public SpriteSheet getIdle()
     {
         return idle;
-    }   
-
-    public SpriteSheet getJump()
-    {
-        return jump;
-    }   
-
-    public SpriteSheet getRun()
-    {
-        return run;
-    }      
-
-    public SpriteSheet getWalk()
-    {
-        return walk;
-    }   
+    }    
 
     public SpriteSheet getDeath()
     {
@@ -246,11 +234,6 @@ public class PlayerMovement
     {
         return hurt;
     }   
-
-    public SpriteSheet getFall()
-    {
-        return fall;
-    }
 
     public Vector2 getVelocity()
     {
@@ -326,21 +309,6 @@ public class PlayerMovement
         this.idle = idle;
     }
 
-    public void setJump(SpriteSheet jump)
-    {
-        this.jump = jump;
-    }
-
-    public void setRun(SpriteSheet run)
-    {
-        this.run = run;
-    }
-
-    public void setWalk(SpriteSheet walk)
-    {
-        this.walk = walk;
-    }
-
     public void setDeath(SpriteSheet death)
     {
         this.death = death;
@@ -355,11 +323,6 @@ public class PlayerMovement
     {
         this.lastAction = this.currentAction;
         this.currentAction = currentAction;
-    }
-
-    public void setFall(SpriteSheet fall)
-    {
-        this.fall = fall;
     }
 
     public void setVelocity(Vector2 velocity)

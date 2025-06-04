@@ -40,7 +40,6 @@ public class SpriteSheet
 	
 	int currentFrame;			// Current frame of the sprite sheet
 	Vector2 tileSize;			// Width and height of the frame in the sprite sheet
-	Vector2 ColisionBox;		// Colision box of the sprite sheet
 
 	int skipFPS;				// Number of frames to skip in the sprite sheet
 	int skipFPSCount;			// Count frame to skip
@@ -76,7 +75,7 @@ public class SpriteSheet
 	}
 
 	void initSpriteSheet(String path, int frameCount, Vector2 tileSize,
-	int skipFPS, float scale, Vector2 position)
+		int skipFPS, float scale, Vector2 position)
 	{
 		try
 		{
@@ -88,7 +87,6 @@ public class SpriteSheet
 		}
 
 		this.position = new Vector2(position.getX(), position.getY());
-		this.ColisionBox = new Vector2(tileSize.getX(), tileSize.getY());
 		this.scale = scale;
 		this.rotation = 0;
 		this.color = WHITE;

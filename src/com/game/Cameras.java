@@ -72,8 +72,6 @@ public class Cameras
 /***                                 GETTERS                                       */
 /***********************************************************************************/
 
-    // TODO: move function in oneCamera class
-
     public Camera2D getMainCamera()
     {
         return mainCamera.camera;

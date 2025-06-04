@@ -10,6 +10,5 @@ public enum PlayerType
 	PRIEST,
 	DRUID,
 	WARLOCK,
-	DEMON_HUNTER,
-	TEST
+	DEMON_HUNTER
 }

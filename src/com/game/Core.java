@@ -38,6 +38,8 @@ import com.enums.PlayerType;
 import com.player.Player;
 import com.player.InitPlayer;
 
+// import java.util.List;
+
 public class Core
 {
 /***********************************************************************************/
@@ -51,6 +53,10 @@ public class Core
 
 	Cameras	cameras;
 
+	// TODO: 01: 1/3 Map Gestion 
+	// List<Maps> maps;
+	// Map		currentMap;
+
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
 /***********************************************************************************/
@@ -63,16 +69,23 @@ public class Core
 		initWindow((int)WindowSize.getX(), (int)WindowSize.getY(), title);
         setTargetFPS(60);
 
-		// // Initialize the player
+		// Initialize the player
 		initPlayer();
 
-
+		// Initialize the cameras
 		cameras = new Cameras();
 
+		// Initialize the main camera
 		Rectangle recForCam = new Rectangle(0, 0, windowSize.getX(), windowSize.getY());
 		cameras.initOneCamera(cameras.getMainCamera(), recForCam, windowSize);
 		cameras.getMainCamera().setOffset(new Vector2(0, 0));
+
+		// Set the target to follow the player
 		cameras.setTargetToFollow(player.getPosition());
+
+		// TODO: 01: 2/3 Map Gestion 
+		// Initialize the maps
+		// initMaps();
 	}
 
 /***********************************************************************************/
@@ -83,8 +96,6 @@ public class Core
 	{
 		// For adjust the camera to follow the player
 		followCamera(player.getPosition());
-		// followCamera(new Vector2(0, 0));
-
 
 		beginDrawing();
 			beginTextureMode(cameras.getMainTexture());
@@ -96,7 +107,7 @@ public class Core
 				endMode2D();
 			endTextureMode();
 
-				renderOnScreen();
+			renderOnScreen();
 
 		endDrawing();
 	}
@@ -113,6 +124,9 @@ public class Core
 
 		// Update the player 
 		player.update();
+
+		// TODO: 01: 3/3 Map Gestion
+		// currentMap.update();
 	}
 
 	void renderOnScreen()
@@ -131,13 +145,16 @@ public class Core
 		);
 	}
 
+	// Initialize the player scale, size, position, colision box size and offset
 	void initPlayer()
 	{
+		// Initialize the player position and size
 		Vector2 playerPos = new Vector2(0, 0);
 		Vector2 playerSize = new Vector2(64, 64);
-		Vector2 collBoxSize = new Vector2(64, 64);
+		Vector2 collBoxSize = new Vector2(38, 64);
 		int playerScale = 2;
 
+		// Initialize the player colision box
 		Rectangle playerColisionSize = new Rectangle(
 			-(playerSize.getX() / 2 * playerScale),
 			-(playerSize.getY() / 2 * playerScale) + ((playerSize.getY() - collBoxSize.getY()) * playerScale) - playerScale,
@@ -145,25 +162,19 @@ public class Core
 			collBoxSize.getY()
 		);
 
-		Rectangle weaponColisionBox = new Rectangle(
-			playerColisionSize.getX(),
-			playerColisionSize.getY(),
-			34,
-			38
-		);
-
+		// Initialize the player offset to center the player on the screen
 		Vector2 playerOffset = new Vector2(WindowSize.getX() / 2, WindowSize.getY() / 2);
 
+		// Create the player
 		player = new Player(
 			playerPos,
 			playerSize,
 			playerColisionSize,
-			weaponColisionBox,
 			playerScale,
 			playerOffset
 		);
 
-		new InitPlayer(PlayerType.TEST, player, playerPos, playerSize);
-		player.setBounceForce(0.0f);
+		// Initialize the player
+		new InitPlayer(PlayerType.WARRIOR, player, playerPos, playerSize, playerScale);
 	}
 }

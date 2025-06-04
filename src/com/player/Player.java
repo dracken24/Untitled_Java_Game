@@ -17,9 +17,8 @@ package com.player;
 import com.enums.SpriteMovement;
 import com.raylib.Vector2;
 import static com.raylib.Raylib.drawRectangleRec;
-import static com.raylib.Raylib.WHITE;
+// import static com.raylib.Raylib.WHITE;
 import static com.raylib.Raylib.KeyboardKey.KEY_B;
-import static com.raylib.Raylib.KeyboardKey.KEY_R;
 import static com.raylib.Raylib.isKeyPressed;
 
 import com.raylib.Color;
@@ -36,15 +35,11 @@ public class Player
 	Vector2		position;
 	Vector2		size;
 	Rectangle	colisionBox;
-	Rectangle	weaponColisionBox;
 	int			scale;
 	Vector2		offset;
-	Vector2		collisionBoxOffset;
 
 	Vector2		initialPosition;
 	Rectangle	initialColisionBox;
-
-	private float bounceForce;
 
 	public static Color RED_SHADOW = new Color((byte)230, (byte)41, (byte)55, (byte)105);
 	public static Color DARKPURPLE_SHADOW = new Color((byte)112, (byte)31, (byte)126, (byte)105);
@@ -54,26 +49,24 @@ public class Player
 /***********************************************************************************/
 
 	public Player(Vector2 position, Vector2 size, Rectangle colisionBox,
-		Rectangle weaponColisionBox, int scale, Vector2 offset)
+		int scale, Vector2 offset)
 	{
 		movement = new PlayerMovement();
 		this.position = position;
 		this.size = size;
 		this.scale = scale;
 		this.colisionBox = colisionBox;
-		this.weaponColisionBox = weaponColisionBox;
 		this.offset = offset;
 		initialPosition = new Vector2(position.getX(), position.getY());
 		initialColisionBox = new Rectangle(colisionBox.getX(), colisionBox.getY(), colisionBox.getWidth(), colisionBox.getHeight());
-		bounceForce = 0.0f;
-		collisionBoxOffset = new Vector2(colisionBox.getX(), colisionBox.getY());
 	}
 
 /***********************************************************************************/
 /***                                 FUNCTIONS                                   ***/
 /***********************************************************************************/
 
-	boolean isDebug = true;
+	boolean isDebug = false;
+
 	public void update()
 	{
 		// drawSize();
@@ -83,10 +76,9 @@ public class Player
 		}
 		if (isDebug)
 		{
-			// drawColisionBox();
+			drawColisionBox();
 			// System.out.println("Weapon coll box x: " + this.weaponColisionBox.getX() + "  y: " + this.weaponColisionBox.getY() );
 		}
-		
 
 		movement.applyMovement(position, colisionBox, movement.getVelocity());
 		movement.update(position, offset);
@@ -95,23 +87,13 @@ public class Player
 	void drawColisionBox()
 	{
 		Rectangle colBox = new Rectangle(
-			this.colisionBox.getX() + offset.getX(), 
+			(this.colisionBox.getX() + offset.getX() + this.colisionBox.getHeight() - this.colisionBox.getWidth()), 
 			this.colisionBox.getY() + offset.getY(), 
 			this.colisionBox.getWidth() * scale,
 			this.colisionBox.getHeight() * scale
 		);
 		
 		drawRectangleRec(colBox, DARKPURPLE_SHADOW);
-	}
-
-	void drawSize()
-	{
-		drawRectangleRec(
-			new Rectangle(position.getX() - (size.getX() / 2 * scale) + offset.getX(),
-			position.getY() - (size.getY() / 2 * scale) + offset.getY(),
-			size.getX() * scale,
-			size.getY() * scale), WHITE
-		);
 	}
 
 /***********************************************************************************/
@@ -163,28 +145,9 @@ public class Player
 		return movement.getActionInProgress();
 	}
 
-	public float getBounceForce()
-	{
-		return bounceForce;
-	}
-
-	public Vector2 getCollisionBoxOffset()
-	{
-		return collisionBoxOffset;
-	}
-
-	public Rectangle getWeaponCollisonBox()
-	{
-		return weaponColisionBox;
-	}
-
-	public Rectangle getWeaponCollisonBoxPlusOffset()
-	{
-		return new Rectangle(weaponColisionBox.getX() + offset.getX(), weaponColisionBox.getY() + offset.getY(), weaponColisionBox.getWidth() * scale, weaponColisionBox.getHeight() * scale);
-	}
-
 /***********************************************************************************/
 /***                                 SETTERS                                       */
+/***********************************************************************************/
 
 	public void setMovement(SpriteMovement movement)
 	{
@@ -224,15 +187,5 @@ public class Player
 	public void setIsWallCollide(boolean isWallCollide)
 	{
 		movement.setIsWallCollide(isWallCollide);
-	}
-
-	public void setBounceForce(float bounceForce)
-	{
-		this.bounceForce = bounceForce;
-	}
-
-	public void setWeaponCollisonBox(Rectangle collBox)
-	{
-		this.weaponColisionBox = collBox;
 	}
 }

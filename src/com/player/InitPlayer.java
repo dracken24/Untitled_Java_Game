@@ -22,12 +22,12 @@ import com.enums.PlayerType;
 public class InitPlayer
 {
 	public InitPlayer(PlayerType playerType, Player player,
-		Vector2 playerPos, Vector2 playerSize)
+		Vector2 playerPos, Vector2 playerSize, int scale)
     {
 		switch (playerType)
 		{
-			case TEST:
-                initTest(player, playerSize, playerPos);
+			case WARRIOR:
+                initWarrior(player, playerSize, playerPos, scale);
 				break;
 			// case FIGHTER:
             //     initFighter();
@@ -38,10 +38,8 @@ public class InitPlayer
 		}
     }
 
-    private void initTest(Player player, Vector2 playerSize, Vector2 playerPos)
+    private void initWarrior(Player player, Vector2 playerSize, Vector2 playerPos, int scale)
     {
-		int scale = 2;
-
 		// Idle
         player.movement.setIdle(new SpriteSheet(
 			"assets/Players/Player_Test_48x72/pTest_Idle.png",
