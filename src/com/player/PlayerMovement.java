@@ -50,21 +50,13 @@ public class PlayerMovement
 
     SpriteMovement actionInProgress;
 
-	// boolean		rightSide;
-
     int actionCounter;
-    int attackCounter;
-    int weaponHitCounter;
 
     Vector2 velocity;
     Vector2 velocityMinMax_Y;
     Vector2 velocityMinMax_X;
     Vector2 lastPlayerPosition;
-    float fallSpeedMax;
-    float jumpForce;
 
-    boolean isJumping;
-    boolean isAtRest;
     boolean isWallCollide;
 
 /***********************************************************************************/
@@ -78,8 +70,6 @@ public class PlayerMovement
         this.lastAction = null;
 
         this.actionCounter = 0;
-        this.attackCounter = 0;
-        this.weaponHitCounter = 0;
 
         this.velocity = new Vector2(0, 0);
         this.velocityMinMax_Y = new Vector2(0, 4);
@@ -240,16 +230,6 @@ public class PlayerMovement
         return velocity;
     }
 
-    public boolean getIsJumping()
-    {
-        return isJumping;
-    }
-
-    public boolean getIsAtRest()
-    {
-        return isAtRest;
-    }
-
     public int getActionCounter()
     {
         return actionCounter;
@@ -258,11 +238,6 @@ public class PlayerMovement
     public SpriteMovement getActionInProgress()
     {
         return actionInProgress;
-    }
-
-    public int getWeaponHitCounter()
-    {
-        return weaponHitCounter;
     }
 
 /***********************************************************************************/
@@ -328,16 +303,6 @@ public class PlayerMovement
     public void setVelocity(Vector2 velocity)
     {
         this.velocity = velocity;
-    }
-
-    public void setIsJumping(boolean isJumping)
-    {
-        this.isJumping = isJumping;
-    }
-
-    public void setIsAtRest(boolean isAtRest)
-    {
-        this.isAtRest = isAtRest;
     }
 
     public void setActionCounter(int actionCounter)

@@ -130,16 +130,6 @@ public class Player
 		return offset;
 	}
 
-	public boolean getIsJumping()
-	{
-		return movement.getIsJumping();
-	}
-
-	public boolean getIsAtRest()
-	{
-		return movement.getIsAtRest();
-	}
-
 	public SpriteMovement getActionInProgress()
 	{
 		return movement.getActionInProgress();
@@ -167,16 +157,6 @@ public class Player
 	public void setOffset(Vector2 offset)
 	{
 		this.offset = offset;
-	}
-
-	public void setIsJumping(boolean isJumping)
-	{
-		movement.setIsJumping(isJumping);
-	}
-
-	public void setIsAtRest(boolean isAtRest)
-	{
-		movement.setIsJumping(isAtRest);
 	}
 
 	public void setActionCounter(int actionCounter)
