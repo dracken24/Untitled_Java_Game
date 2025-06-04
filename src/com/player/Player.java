@@ -1,17 +1,3 @@
-/* =============================================================================== */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/*               -------------------------------------------------                 */
-/*                PROJET: Java Dev          PAR: Dracken24                         */
-/*               -------------------------------------------------                 */
-/*                CREATED: 28-2nd-2025                                             */
-/*                MODIFIED BY: Dracken24                                           */
-/*                LAST MODIFIED: 28-2nd-2025                                       */
-/*               -------------------------------------------------                 */
-/*                FILE: Player.java                                                */
-/*               -------------------------------------------------                 */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/* =============================================================================== */
-
 package com.player;
 
 import com.enums.SpriteMovement;
@@ -32,14 +18,14 @@ public class Player
 /***********************************************************************************/
 
 	public PlayerMovement	movement;
-	Vector2		position;
-	Vector2		size;
-	Rectangle	colisionBox;
-	int			scale;
-	Vector2		offset;
+	Vector2		position;		// Player position on World
+	Vector2		size;			// Player size
+	Rectangle	colisionBox;	// Player colision box
+	int			scale;			// Player scale
+	Vector2		offset;			// Player offset
 
-	Vector2		initialPosition;
-	Rectangle	initialColisionBox;
+	Vector2		initialPosition;	// Player initial position
+	Rectangle	initialColisionBox;	// Player initial colision box
 
 	public static Color RED_SHADOW = new Color((byte)230, (byte)41, (byte)55, (byte)105);
 	public static Color DARKPURPLE_SHADOW = new Color((byte)112, (byte)31, (byte)126, (byte)105);

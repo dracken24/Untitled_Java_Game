@@ -1,17 +1,3 @@
-/* =============================================================================== */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/*               -------------------------------------------------                 */
-/*                PROJET: Java Dev          PAR: Dracken24                         */
-/*               -------------------------------------------------                 */
-/*                CREATED: 28-2nd-2025                                             */
-/*                MODIFIED BY: Dracken24                                           */
-/*                LAST MODIFIED: 28-2nd-2025                                       */
-/*               -------------------------------------------------                 */
-/*                FILE: InitPlayer.java                                            */
-/*               -------------------------------------------------                 */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/* =============================================================================== */
-
 package com.player;
 
 import com.objects.SpriteSheet;
@@ -55,7 +41,7 @@ public class InitPlayer
 			"assets/Players/Player_Test_48x72/pTest_Right.png",
 			6,
 			playerSize,
-			8,
+			7,
 			scale,
 			playerPos
 		));
@@ -65,7 +51,7 @@ public class InitPlayer
 			"assets/Players/Player_Test_48x72/pTest_Left.png",
 			6,
 			playerSize,
-			8,
+			7,
 			scale,
 			playerPos
 		));
@@ -75,7 +61,7 @@ public class InitPlayer
 			"assets/Players/Player_Test_48x72/pTest_Up.png",
 			6,
 			playerSize,
-			8,
+			7,
 			scale,
 			playerPos
 		));
@@ -85,7 +71,7 @@ public class InitPlayer
 			"assets/Players/Player_Test_48x72/pTest_Down.png",
 			6,
 			playerSize,
-			8,
+			7,
 			scale,
 			playerPos
 		));

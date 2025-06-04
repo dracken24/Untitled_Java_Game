@@ -1,17 +1,3 @@
-/* =============================================================================== */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/*               -------------------------------------------------                 */
-/*                PROJET: Java Dev          PAR: Dracken24                         */
-/*               -------------------------------------------------                 */
-/*                CREATED: 28-2nd-2025                                             */
-/*                MODIFIED BY: Dracken24                                           */
-/*                LAST MODIFIED: 28-2nd-2025                                       */
-/*               -------------------------------------------------                 */
-/*                FILE: init.java                                                  */
-/*               -------------------------------------------------                 */
-/* ---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~--- */
-/* =============================================================================== */
-
 package com.game;
 
 import static com.raylib.Raylib.initWindow;
@@ -38,24 +24,26 @@ import com.enums.PlayerType;
 import com.player.Player;
 import com.player.InitPlayer;
 
-// import java.util.List;
+import com.Environement.GameMap;
 
+import java.util.ArrayList;
+
+// Class for global game gestion
 public class Core
 {
 /***********************************************************************************/
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
 
-	Vector2		WindowSize;
-	String		title;
+	Vector2		WindowSize;			// Window size
+	String		title;				// Window title
 
-	Player		player;
+	Player		player;				// Player
 
-	Cameras	cameras;
+	Cameras	cameras;				// Cameras
 
-	// TODO: 01: 1/3 Map Gestion 
-	// List<Maps> maps;
-	// Map		currentMap;
+	ArrayList<GameMap> allMaps;
+	GameMap		currentMap;
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
@@ -83,9 +71,22 @@ public class Core
 		// Set the target to follow the player
 		cameras.setTargetToFollow(player.getPosition());
 
-		// TODO: 01: 2/3 Map Gestion 
 		// Initialize the maps
-		// initMaps();
+		allMaps = new ArrayList<>();
+
+		GameMap map1 = new GameMap(
+			"assets/Environement/City_01/town_01.png",
+			null,
+			null,
+			"assets/Environement/City_01/town_01_top_player.png",
+			null,
+			null,
+			new Rectangle(-484, -524, 1536, 1536),
+			2
+		);
+		allMaps.add(map1);
+
+		currentMap = map1;
 	}
 
 /***********************************************************************************/
@@ -122,8 +123,18 @@ public class Core
 	{
 		drawText("Untitled Action RPG Game", 470, 150, 20, VIOLET);
 
-		// Update the player 
+		// Draw Map layer under the player
+		currentMap.drawLayer(1);
+		currentMap.drawLayer(2);
+		currentMap.drawLayer(3);
+
+		// Update the player
 		player.update();
+
+		// Draw Map layer over the player
+		currentMap.drawLayer(4);
+		currentMap.drawLayer(5);
+		currentMap.drawLayer(6);
 
 		// TODO: 01: 3/3 Map Gestion
 		// currentMap.update();
