@@ -16,15 +16,16 @@ public class InitPlayer
                 initWarrior(player, playerSize, playerPos, scale);
 				break;
 			// case FIGHTER:
-            //     initFighter();
+            //     initFighter(player, playerSize, playerPos, scale);
 			// 	break;
 			// case SAMURAI:
-            //     initSamurai(player, playerPos, playerSize);
+            //     initSamurai(player, playerSize, playerPos, scale);
 			// 	break;
 		}
     }
 
-    private void initWarrior(Player player, Vector2 playerSize, Vector2 playerPos, int scale)
+    private void initWarrior(Player player, Vector2 playerSize,
+		Vector2 playerPos, int scale)
     {
 		// Idle
         player.movement.setIdle(new SpriteSheet(

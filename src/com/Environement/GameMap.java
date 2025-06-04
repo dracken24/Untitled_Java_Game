@@ -24,7 +24,7 @@ public class GameMap
     Texture layer6;		// Texture 6 of the sprite sheet
 
     Rectangle recForMap;
-    float scale;
+    int scale;
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
@@ -32,7 +32,7 @@ public class GameMap
 
     public GameMap(String path_layer1, String path_layer2, String path_layer3,
         String path_layer4, String path_layer5, String path_layer6,
-            Rectangle recForMap, float scale)
+            Rectangle recForMap, int scale)
     {
         if (path_layer1 != null)
         {
@@ -123,6 +123,31 @@ public class GameMap
         return layer1;
     }
 
+    public Texture getLayer2()
+    {
+        return layer2;
+    }
+
+    public Texture getLayer3()
+    {
+        return layer3;
+    }
+
+    public Texture getLayer4()
+    {
+        return layer4;
+    }
+
+    public Texture getLayer5()
+    {
+        return layer5;
+    }
+
+    public Texture getLayer6()
+    {
+        return layer6;
+    }
+
 /***********************************************************************************/
 /***                                 SETTERS                                       */	
 /***********************************************************************************/
@@ -130,5 +155,30 @@ public class GameMap
     public void setLayer1(Texture layer1)
     {
         this.layer1 = layer1;
+    }
+
+    public void setLayer2(Texture layer2)
+    {
+        this.layer2 = layer2;
+    }
+
+    public void setLayer3(Texture layer3)
+    {
+        this.layer3 = layer3;
+    }
+
+    public void setLayer4(Texture layer4)
+    {
+        this.layer4 = layer4;
+    }
+
+    public void setLayer5(Texture layer5)
+    {
+        this.layer5 = layer5;
+    }
+
+    public void setLayer6(Texture layer6)
+    {
+        this.layer6 = layer6;
     }
 }

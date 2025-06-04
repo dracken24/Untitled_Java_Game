@@ -21,7 +21,7 @@ public class Player
 	Vector2		position;		// Player position on World
 	Vector2		size;			// Player size
 	Rectangle	colisionBox;	// Player colision box
-	int			scale;			// Player scale
+	float		scale;			// Player scale
 	Vector2		offset;			// Player offset
 
 	Vector2		initialPosition;	// Player initial position
@@ -35,7 +35,7 @@ public class Player
 /***********************************************************************************/
 
 	public Player(Vector2 position, Vector2 size, Rectangle colisionBox,
-		int scale, Vector2 offset)
+		float scale, Vector2 offset)
 	{
 		movement = new PlayerMovement();
 		this.position = position;

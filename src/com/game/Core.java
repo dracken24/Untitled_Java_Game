@@ -135,9 +135,6 @@ public class Core
 		currentMap.drawLayer(4);
 		currentMap.drawLayer(5);
 		currentMap.drawLayer(6);
-
-		// TODO: 01: 3/3 Map Gestion
-		// currentMap.update();
 	}
 
 	void renderOnScreen()
