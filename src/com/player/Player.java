@@ -3,9 +3,8 @@ package com.player;
 import com.enums.SpriteMovement;
 import com.raylib.Vector2;
 import static com.raylib.Raylib.drawRectangleRec;
-// import static com.raylib.Raylib.WHITE;
 import static com.raylib.Raylib.KeyboardKey.KEY_B;
-import static com.raylib.Raylib.isKeyPressed;
+import static com.raylib.Raylib.isKeyPressed;		
 
 import com.raylib.Color;
 
@@ -21,6 +20,7 @@ public class Player
 	Vector2		position;		// Player position on World
 	Vector2		size;			// Player size
 	Rectangle	colisionBox;	// Player colision box
+	Rectangle	lastColisionBox;	// Player last colision box
 	float		scale;			// Player scale
 	Vector2		offset;			// Player offset
 
@@ -42,6 +42,7 @@ public class Player
 		this.size = size;
 		this.scale = scale;
 		this.colisionBox = colisionBox;
+		this.lastColisionBox = colisionBox;
 		this.offset = offset;
 		initialPosition = new Vector2(position.getX(), position.getY());
 		initialColisionBox = new Rectangle(colisionBox.getX(), colisionBox.getY(), colisionBox.getWidth(), colisionBox.getHeight());
@@ -51,7 +52,7 @@ public class Player
 /***                                 FUNCTIONS                                   ***/
 /***********************************************************************************/
 
-	boolean isDebug = false;
+	boolean isDebug = true;
 
 	public void update()
 	{
@@ -66,8 +67,8 @@ public class Player
 			// System.out.println("Weapon coll box x: " + this.weaponColisionBox.getX() + "  y: " + this.weaponColisionBox.getY() );
 		}
 
-		movement.applyMovement(position, colisionBox, movement.getVelocity());
-		movement.update(position, offset);
+		// this.movement.applyMovement(position, colisionBox, movement.getVelocity());
+		this.movement.update();
 	}
 
 	void drawColisionBox()
@@ -121,6 +122,16 @@ public class Player
 		return movement.getActionInProgress();
 	}
 
+	public Rectangle getLastColisionBox()
+	{
+		return lastColisionBox;
+	}
+
+	public Vector2 getSize()
+	{
+		return this.size;
+	}
+
 /***********************************************************************************/
 /***                                 SETTERS                                       */
 /***********************************************************************************/
@@ -153,5 +164,10 @@ public class Player
 	public void setIsWallCollide(boolean isWallCollide)
 	{
 		movement.setIsWallCollide(isWallCollide);
+	}
+
+	public void setLastColisionBox(Rectangle lastColisionBox)
+	{
+		this.lastColisionBox = lastColisionBox;
 	}
 }

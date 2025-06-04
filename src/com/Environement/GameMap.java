@@ -7,12 +7,14 @@ import static com.raylib.Raylib.drawTexturePro;
 import com.raylib.Rectangle;
 import com.raylib.Vector2;
 
+import com.Environement.CollisionMap;
 
 public class GameMap
 {
 /***********************************************************************************/
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
+
     Texture layer1;		// Texture 1 of the sprite sheet
     Texture layer2;		// Texture 2 of the sprite sheet
     Texture layer3;		// Texture 3 of the sprite sheet
@@ -24,7 +26,10 @@ public class GameMap
     Texture layer6;		// Texture 6 of the sprite sheet
 
     Rectangle recForMap;
+    Vector2 tileSize;
     int scale;
+
+    public CollisionMap collisionMap;
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
@@ -32,7 +37,7 @@ public class GameMap
 
     public GameMap(String path_layer1, String path_layer2, String path_layer3,
         String path_layer4, String path_layer5, String path_layer6,
-            Rectangle recForMap, int scale)
+            Rectangle recForMap, Vector2 tileSize, int scale, CollisionMap collisionMap)
     {
         if (path_layer1 != null)
         {
@@ -61,6 +66,9 @@ public class GameMap
         
         this.recForMap = recForMap;
         this.scale = scale;
+        this.tileSize = tileSize;
+
+        this.collisionMap = collisionMap;
     }
 
 /***********************************************************************************/
@@ -71,7 +79,7 @@ public class GameMap
     {
         Vector2 origin = new Vector2(0, 0);
         Rectangle source = new Rectangle(0, 0, recForMap.getWidth(), recForMap.getHeight());
-        Rectangle dest = new Rectangle(recForMap.getX(), recForMap.getY(), recForMap.getWidth() * scale, recForMap.getHeight() * scale);
+        Rectangle dest = new Rectangle(0, 0, recForMap.getWidth() * scale, recForMap.getHeight() * scale);
 
         switch (layer)
         {

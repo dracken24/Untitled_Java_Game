@@ -1,32 +1,31 @@
 package com.game;
 
+import static com.raylib.Raylib.LIGHTGRAY;
+import static com.raylib.Raylib.VIOLET;
+import static com.raylib.Raylib.WHITE;
+import static com.raylib.Raylib.beginDrawing;
+import static com.raylib.Raylib.beginMode2D;
+import static com.raylib.Raylib.beginTextureMode;
+import static com.raylib.Raylib.checkCollisionRecs;
+import static com.raylib.Raylib.clearBackground;
+import static com.raylib.Raylib.drawText;
+import static com.raylib.Raylib.drawTextureRec;
+import static com.raylib.Raylib.endDrawing;
+import static com.raylib.Raylib.endMode2D;
+import static com.raylib.Raylib.endTextureMode;
 import static com.raylib.Raylib.initWindow;
 import static com.raylib.Raylib.setTargetFPS;
 
-import static com.raylib.Raylib.beginDrawing;
-import static com.raylib.Raylib.beginTextureMode;
-import static com.raylib.Raylib.clearBackground;
-import static com.raylib.Raylib.endDrawing;
-import static com.raylib.Raylib.drawText;
-import static com.raylib.Raylib.drawTextureRec;
-import static com.raylib.Raylib.VIOLET;
-import static com.raylib.Raylib.LIGHTGRAY;
+import java.util.ArrayList;
 
-import com.raylib.Vector2;
+import com.Environement.CollisionMap;
+import com.Environement.GameMap;
+import com.enums.PlayerType;
+import com.player.InitPlayer;
+import com.player.Player;
 import com.raylib.Camera2D;
 import com.raylib.Rectangle;
-import static com.raylib.Raylib.beginMode2D;
-import static com.raylib.Raylib.endMode2D;
-import static com.raylib.Raylib.endTextureMode;
-import static com.raylib.Raylib.WHITE;
-
-import com.enums.PlayerType;
-import com.player.Player;
-import com.player.InitPlayer;
-
-import com.Environement.GameMap;
-
-import java.util.ArrayList;
+import com.raylib.Vector2;
 
 // Class for global game gestion
 public class Core
@@ -74,6 +73,9 @@ public class Core
 		// Initialize the maps
 		allMaps = new ArrayList<>();
 
+		CollisionMap collisionMap = new CollisionMap(new Vector2(48, 48), new Vector2(64, 64), 2);
+		mountCollMap(collisionMap);
+
 		GameMap map1 = new GameMap(
 			"assets/Environement/City_01/town_01.png",
 			null,
@@ -81,9 +83,13 @@ public class Core
 			"assets/Environement/City_01/town_01_top_player.png",
 			null,
 			null,
-			new Rectangle(-484, -524, 1536, 1536),
-			2
+			new Rectangle(0, 0, 1536, 1536),
+			new Vector2(64, 64),
+			2,
+			collisionMap
 		);
+		map1.collisionMap.printMap();
+
 		allMaps.add(map1);
 
 		currentMap = map1;
@@ -103,7 +109,7 @@ public class Core
 				clearBackground(LIGHTGRAY);
 				beginMode2D(cameras.getMainCamera());
 				
-					onDrawning();
+				onDrawning();
 
 				endMode2D();
 			endTextureMode();
@@ -111,6 +117,39 @@ public class Core
 			renderOnScreen();
 
 		endDrawing();
+		
+		player.movement.setLastPosition(player.getPosition());
+		player.setLastColisionBox(player.getColisionBox());
+	}
+
+	void checkCollision()
+	{
+		Rectangle playerColisionBox = new Rectangle(
+			player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth(),
+			player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight(),
+			player.getColisionBox().getWidth(),
+			player.getColisionBox().getHeight()
+		);
+
+		for (int i = 0; i < currentMap.collisionMap.getCollisionMap().length; i++)
+		{
+			for (int j = 0; j < currentMap.collisionMap.getCollisionMap()[i].length; j++)
+			{
+				if (currentMap.collisionMap.getCollisionMap()[i][j] == 1)
+				{
+					if (checkCollisionRecs(playerColisionBox, new Rectangle(i * 64, j * 64, 64, 64)))
+					{
+						// System.out.println("Collision: " + i + " " + j);
+						player.movement.setIsWallCollide(true);
+						player.setPosition(new Vector2(player.movement.getLastPosition().getX(), player.movement.getLastPosition().getY()));
+						player.setColisionBox(player.getLastColisionBox());
+						return;
+					}
+				}
+			}
+		}
+		// Reset wall collision if no collision is detected
+		player.movement.setIsWallCollide(false);
 	}
 
 	void followCamera(Vector2 targetPosition)
@@ -121,20 +160,37 @@ public class Core
 
 	void onDrawning()
 	{
-		drawText("Untitled Action RPG Game", 470, 150, 20, VIOLET);
+		// drawText("Untitled Action RPG Game", 470, 150, 20, VIOLET);
 
 		// Draw Map layer under the player
 		currentMap.drawLayer(1);
 		currentMap.drawLayer(2);
 		currentMap.drawLayer(3);
 
+		// Check collision before applying movement
+		checkCollision();
 		// Update the player
 		player.update();
+		
+
+		player.movement.applyMovement(player.getPosition(), player.getColisionBox(), player.movement.getVelocity());
+		player.movement.printPlayer(player.getPosition(), player.getOffset());
 
 		// Draw Map layer over the player
 		currentMap.drawLayer(4);
 		currentMap.drawLayer(5);
 		currentMap.drawLayer(6);
+
+		drawText(
+			"X: " + (player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth()) +
+				" Y: " + (player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight()),
+			(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 100,
+			(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 100,
+			20,
+			VIOLET
+		);
+
+		currentMap.collisionMap.printMap();
 	}
 
 	void renderOnScreen()
@@ -184,5 +240,12 @@ public class Core
 
 		// Initialize the player
 		new InitPlayer(PlayerType.WARRIOR, player, playerPos, playerSize, playerScale);
+	}
+
+	void mountCollMap(CollisionMap collisionMap)
+	{
+		collisionMap.setCollisionAt(1, 1, 1);
+		collisionMap.setCollisionAt(2, 2, 1);
+		collisionMap.setCollisionAt(3, 3, 1);
 	}
 }

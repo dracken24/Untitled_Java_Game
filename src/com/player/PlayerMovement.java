@@ -45,6 +45,8 @@ public class PlayerMovement
 
     boolean isWallCollide;
 
+    Vector2 offset;
+
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
 /***********************************************************************************/
@@ -70,7 +72,7 @@ public class PlayerMovement
 /***                                 FUNCTIONS                                     */
 /***********************************************************************************/
 
-	public void update(Vector2 playerPosition, Vector2 offset)
+	public void update()
 	{
         catchInput();
         setMovement(this.actionInProgress);
@@ -80,10 +82,15 @@ public class PlayerMovement
 			this.currentAction.resetCounter();
 		}
 
-		this.currentAction.updateSprite(false, playerPosition, offset);
+		// this.currentAction.updateSprite(false, playerPosition, offset);
         
-        this.lastPlayerPosition = playerPosition;
+        // this.lastPlayerPosition = playerPosition;
 	}
+
+    public void printPlayer(Vector2 playerPosition, Vector2 offset)
+    {
+        this.currentAction.updateSprite(false, playerPosition, offset);
+    }
 
     public Vector2 applyMovement(Vector2 position, Rectangle colisionBox, Vector2 velocity)
     {
@@ -155,6 +162,8 @@ public class PlayerMovement
             velocity.setX(0);
             velocity.setY(0);
         }
+
+        isWallCollide = false;
 	}
 
 /***********************************************************************************/
@@ -224,6 +233,11 @@ public class PlayerMovement
     public SpriteMovement getActionInProgress()
     {
         return actionInProgress;
+    }
+
+    public Vector2 getLastPosition()
+    {
+        return lastPlayerPosition;
     }
 
 /***********************************************************************************/
@@ -336,6 +350,11 @@ public class PlayerMovement
                 }
                 break;
         }
+    }
+
+    public void setLastPosition(Vector2 lastPosition)
+    {
+        this.lastPlayerPosition = lastPosition;
     }
 }
 

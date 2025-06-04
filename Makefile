@@ -14,7 +14,7 @@ JAVA_FILES = src/App.java \
             src/com/enums/SpriteMovement.java \
             src/com/game/Cameras.java \
             src/com/Environement/GameMap.java \
-
+            src/com/Environement/CollisionMap.java 
 all: compile
 
 compile:
