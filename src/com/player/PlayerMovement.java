@@ -2,6 +2,8 @@ package com.player;
 
 import static com.raylib.Raylib.KeyboardKey.KEY_A;
 import static com.raylib.Raylib.KeyboardKey.KEY_D;
+import static com.raylib.Raylib.KeyboardKey.KEY_LEFT_SHIFT;
+import static com.raylib.Raylib.KeyboardKey.KEY_RIGHT_SHIFT;
 import static com.raylib.Raylib.KeyboardKey.KEY_W;
 import static com.raylib.Raylib.KeyboardKey.KEY_S;
 import static com.raylib.Raylib.isKeyDown;
@@ -43,9 +45,9 @@ public class PlayerMovement
     Vector2 velocityMinMax_X;
     Vector2 lastPlayerPosition;
 
-    boolean isWallCollide;
-
     Vector2 offset;
+
+    boolean isRunning;
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
@@ -65,7 +67,7 @@ public class PlayerMovement
 
         this.lastPlayerPosition = new Vector2(0, 0);
 
-        this.isWallCollide = false;
+        this.isRunning = false;
     }
 
 /***********************************************************************************/
@@ -142,6 +144,28 @@ public class PlayerMovement
             this.actionInProgress = SpriteMovement.DOWN;
         }
 
+        if (isKeyDown(KEY_LEFT_SHIFT))
+        {
+            this.isRunning = true;
+            int isNegatif = 1;
+            if (velocity.getX() < 0)
+            {
+                isNegatif = -1;
+            }
+            velocity.setX(velocityMinMax_X.getY() * 5 * isNegatif);
+            isNegatif = 1;
+            if (velocity.getY() < 0)
+            {
+                isNegatif = -1;
+            }
+            velocity.setY(velocityMinMax_Y.getY() * 5 * isNegatif);
+        }
+        else
+        {
+            this.isRunning = false;
+
+        }
+
         // System.out.println("actionCounter: " + actionCounter);
         // System.out.println("actionInProgress: " + actionInProgress);
 		if (walkOnX == false)
@@ -156,14 +180,6 @@ public class PlayerMovement
         {
             this.actionInProgress = SpriteMovement.IDLE;
         }
-        
-        if (isWallCollide)
-        {
-            velocity.setX(0);
-            velocity.setY(0);
-        }
-
-        isWallCollide = false;
 	}
 
 /***********************************************************************************/
@@ -308,11 +324,6 @@ public class PlayerMovement
     public void setActionCounter(int actionCounter)
     {
         this.actionCounter = actionCounter;
-    }
-
-    public void setIsWallCollide(boolean isWallCollide)
-    {
-        this.isWallCollide = isWallCollide;
     }
 
     public void setMovement(SpriteMovement movement)

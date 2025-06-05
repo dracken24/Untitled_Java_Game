@@ -37,15 +37,15 @@ public class Player
 	public Player(Vector2 position, Vector2 size, Rectangle colisionBox,
 		float scale, Vector2 offset)
 	{
-		movement = new PlayerMovement();
+		this.movement = new PlayerMovement();
 		this.position = position;
 		this.size = size;
 		this.scale = scale;
 		this.colisionBox = colisionBox;
 		this.lastColisionBox = colisionBox;
 		this.offset = offset;
-		initialPosition = new Vector2(position.getX(), position.getY());
-		initialColisionBox = new Rectangle(colisionBox.getX(), colisionBox.getY(), colisionBox.getWidth(), colisionBox.getHeight());
+		this.initialPosition = new Vector2(position.getX(), position.getY());
+		this.initialColisionBox = new Rectangle(colisionBox.getX(), colisionBox.getY(), colisionBox.getWidth(), colisionBox.getHeight());
 	}
 
 /***********************************************************************************/
@@ -92,11 +92,6 @@ public class Player
 		return position;
 	}
 
-	public Vector2 getVelocity()
-	{
-		return movement.getVelocity();
-	}
-
 	public Rectangle getColisionBox()
 	{
 		return colisionBox;
@@ -117,11 +112,6 @@ public class Player
 		return offset;
 	}
 
-	public SpriteMovement getActionInProgress()
-	{
-		return movement.getActionInProgress();
-	}
-
 	public Rectangle getLastColisionBox()
 	{
 		return lastColisionBox;
@@ -132,14 +122,14 @@ public class Player
 		return this.size;
 	}
 
+	public float getScale()
+	{
+		return scale;
+	}
+
 /***********************************************************************************/
 /***                                 SETTERS                                       */
 /***********************************************************************************/
-
-	public void setMovement(SpriteMovement movement)
-	{
-		this.movement.setMovement(movement);
-	}
 
 	public void setPosition(Vector2 position)
 	{
@@ -154,16 +144,6 @@ public class Player
 	public void setOffset(Vector2 offset)
 	{
 		this.offset = offset;
-	}
-
-	public void setActionCounter(int actionCounter)
-	{
-		movement.setActionCounter(actionCounter);
-	}
-
-	public void setIsWallCollide(boolean isWallCollide)
-	{
-		movement.setIsWallCollide(isWallCollide);
 	}
 
 	public void setLastColisionBox(Rectangle lastColisionBox)
