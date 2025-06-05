@@ -3,7 +3,6 @@ package com.player;
 import static com.raylib.Raylib.KeyboardKey.KEY_A;
 import static com.raylib.Raylib.KeyboardKey.KEY_D;
 import static com.raylib.Raylib.KeyboardKey.KEY_LEFT_SHIFT;
-import static com.raylib.Raylib.KeyboardKey.KEY_RIGHT_SHIFT;
 import static com.raylib.Raylib.KeyboardKey.KEY_W;
 import static com.raylib.Raylib.KeyboardKey.KEY_S;
 import static com.raylib.Raylib.isKeyDown;

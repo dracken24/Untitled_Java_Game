@@ -1,12 +1,6 @@
 package com.player;
 
-import com.enums.SpriteMovement;
 import com.raylib.Vector2;
-import static com.raylib.Raylib.drawRectangleRec;
-import static com.raylib.Raylib.KeyboardKey.KEY_B;
-import static com.raylib.Raylib.isKeyPressed;		
-
-import com.raylib.Color;
 
 import com.raylib.Rectangle;
 
@@ -17,18 +11,15 @@ public class Player
 /***********************************************************************************/
 
 	public PlayerMovement	movement;
+
 	Vector2		position;		// Player position on World
 	Vector2		size;			// Player size
+	Vector2		offset;			// Player offset
+	float		scale;			// Player scale
+
 	Rectangle	colisionBox;	// Player colision box
 	Rectangle	lastColisionBox;	// Player last colision box
-	float		scale;			// Player scale
-	Vector2		offset;			// Player offset
-
-	Vector2		initialPosition;	// Player initial position
-	Rectangle	initialColisionBox;	// Player initial colision box
-
-	public static Color RED_SHADOW = new Color((byte)230, (byte)41, (byte)55, (byte)105);
-	public static Color DARKPURPLE_SHADOW = new Color((byte)112, (byte)31, (byte)126, (byte)105);
+	
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                 ***/
@@ -44,43 +35,15 @@ public class Player
 		this.colisionBox = colisionBox;
 		this.lastColisionBox = colisionBox;
 		this.offset = offset;
-		this.initialPosition = new Vector2(position.getX(), position.getY());
-		this.initialColisionBox = new Rectangle(colisionBox.getX(), colisionBox.getY(), colisionBox.getWidth(), colisionBox.getHeight());
 	}
 
 /***********************************************************************************/
 /***                                 FUNCTIONS                                   ***/
 /***********************************************************************************/
 
-	boolean isDebug = true;
-
 	public void update()
 	{
-		// drawSize();
-		if (isKeyPressed(KEY_B))
-		{
-			isDebug = !isDebug;
-		}
-		if (isDebug)
-		{
-			drawColisionBox();
-			// System.out.println("Weapon coll box x: " + this.weaponColisionBox.getX() + "  y: " + this.weaponColisionBox.getY() );
-		}
-
-		// this.movement.applyMovement(position, colisionBox, movement.getVelocity());
 		this.movement.update();
-	}
-
-	void drawColisionBox()
-	{
-		Rectangle colBox = new Rectangle(
-			(this.colisionBox.getX() + offset.getX() + this.colisionBox.getHeight() - this.colisionBox.getWidth()), 
-			this.colisionBox.getY() + offset.getY(), 
-			this.colisionBox.getWidth() * scale,
-			this.colisionBox.getHeight() * scale
-		);
-		
-		drawRectangleRec(colBox, DARKPURPLE_SHADOW);
 	}
 
 /***********************************************************************************/
@@ -95,16 +58,6 @@ public class Player
 	public Rectangle getColisionBox()
 	{
 		return colisionBox;
-	}
-
-	public Rectangle getColisionBoxPlusOffset()
-	{
-		return new Rectangle(
-			colisionBox.getX() + offset.getX(), 
-			colisionBox.getY() + offset.getY(), 
-			colisionBox.getWidth() * scale,
-			colisionBox.getHeight() * scale
-		);
 	}
 
 	public Vector2 getOffset()

@@ -7,27 +7,26 @@ import static com.raylib.Raylib.drawTexturePro;
 import com.raylib.Rectangle;
 import com.raylib.Vector2;
 
-import com.Environement.CollisionMap;
 
-public class GameMap
+public abstract class GameMap
 {
 /***********************************************************************************/
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
 
-    Texture layer1;		// Texture 1 of the sprite sheet
-    Texture layer2;		// Texture 2 of the sprite sheet
-    Texture layer3;		// Texture 3 of the sprite sheet
+    protected Texture layer1;		// Texture 1 of the sprite sheet
+    protected Texture layer2;		// Texture 2 of the sprite sheet
+    protected Texture layer3;		// Texture 3 of the sprite sheet
 
     // Player between layer 3 and 4
 
-    Texture layer4;		// Texture 4 of the sprite sheet
-    Texture layer5;		// Texture 5 of the sprite sheet
-    Texture layer6;		// Texture 6 of the sprite sheet
+    protected Texture layer4;		// Texture 4 of the sprite sheet
+    protected Texture layer5;		// Texture 5 of the sprite sheet
+    protected Texture layer6;		// Texture 6 of the sprite sheet
 
-    Rectangle recForMap;
-    Vector2 tileSize;
-    int scale;
+    protected Rectangle recForMap;
+    protected Vector2 tileSize;
+    protected int scale;
 
     public CollisionMap collisionMap;
 
@@ -74,6 +73,8 @@ public class GameMap
 /***********************************************************************************/
 /***                                 FUNCTIONS                                     */
 /***********************************************************************************/
+
+    abstract public void setCollisionMap();
 
     public void drawLayer(int layer)
     {

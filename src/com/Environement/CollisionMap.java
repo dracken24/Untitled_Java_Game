@@ -1,6 +1,5 @@
 package com.Environement;
 
-import com.raylib.Raylib;
 import com.raylib.Vector2;
 import static com.raylib.Raylib.drawRectangle;
 import static com.raylib.Raylib.RED;
@@ -13,7 +12,6 @@ public class CollisionMap
 
     private int[][] collisionMap;
     private Vector2 tileSize;
-    // private int scale;
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                 ***/
@@ -23,25 +21,11 @@ public class CollisionMap
     {
         this.collisionMap = new int[(int)size.getX()][(int)size.getY()];
         this.tileSize = tileSize;
-        // this.scale = scale;
-
-        fillWithZero();
     }
 
 /***********************************************************************************/
 /***                                 FUNCTIONS                                   ***/
 /***********************************************************************************/
-
-    void fillWithZero()
-    {
-        for (int i = 0; i < collisionMap.length; i++)
-        {
-            for (int j = 0; j < collisionMap[i].length; j++)
-            {
-                collisionMap[i][j] = 0;
-            }
-        }
-    }
 
     public void printMap()
     {
@@ -93,5 +77,4 @@ public class CollisionMap
 
         collisionMap[x][y] = value;
     }
-
 }
