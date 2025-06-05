@@ -130,70 +130,62 @@ public class Core
 	String detectCollisionSide(Rectangle playerBox, Rectangle obstacleBox)
 	{
 		// Get the edges of the player with the scale
-		float playerLeft = playerBox.getX() * player.getScale();
-		float playerRight = playerBox.getX() + playerBox.getWidth() * player.getScale();
-		float playerTop = playerBox.getY() * player.getScale();
-		float playerBottom = playerBox.getY() + playerBox.getHeight() * player.getScale();
-		Rectangle playerBoxScaled = new Rectangle(player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth(), player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight(), playerBox.getWidth() * player.getScale(), playerBox.getHeight() * player.getScale());
+		Rectangle playerBoxScaled = new Rectangle(
+			player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth(),
+			player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight(),
+			playerBox.getWidth() * player.getScale(),
+			playerBox.getHeight() * player.getScale()
+		);
 
 		// draw the player box
-		drawRectangleRec(
-			playerBoxScaled,
-			BLUE
-		);
+		// drawRectangleRec(playerBoxScaled, BLUE);
 		
-		float obstacleLeft = obstacleBox.getX();
-		float obstacleRight = obstacleBox.getX() + obstacleBox.getWidth();
-		float obstacleTop = obstacleBox.getY();
-		float obstacleBottom = obstacleBox.getY() + obstacleBox.getHeight();
-		Rectangle obstacleBoxScaled = new Rectangle(obstacleBox.getX(), obstacleBox.getY(), obstacleBox.getWidth(), obstacleBox.getHeight());
+		Rectangle obstacleBoxScaled = new Rectangle(
+			obstacleBox.getX(),
+			obstacleBox.getY(),
+			obstacleBox.getWidth(),
+			obstacleBox.getHeight()
+		);
 
 		// draw the obstacle box
-		drawRectangleRec(
-			obstacleBoxScaled,
-			GREEN
-		);
+		// drawRectangleRec(obstacleBoxScaled, GREEN);
 
 		// Check if there is a collision
-		// if (playerRight >= obstacleLeft && playerLeft <= obstacleRight &&
-		// 	playerBottom >= obstacleTop && playerTop <= obstacleBottom)
 		if (checkCollisionRecs(playerBoxScaled, obstacleBoxScaled))
 		{
-			System.out.println("Collision");
-			// Get the penetration distances
-			float overlapLeft = playerRight - obstacleLeft;
-			float overlapRight = obstacleRight - playerLeft;
-			float overlapTop = playerBottom - obstacleTop;
-			float overlapBottom = obstacleBottom - playerTop;
+			// Calculate the penetration distances
+			float overlapLeft = Math.abs((playerBoxScaled.getX() + playerBoxScaled.getWidth()) - obstacleBoxScaled.getX());
+			float overlapRight = Math.abs(obstacleBoxScaled.getX() + obstacleBoxScaled.getWidth() - playerBoxScaled.getX());
+			float overlapTop = Math.abs((playerBoxScaled.getY() + playerBoxScaled.getHeight()) - obstacleBoxScaled.getY());
+			float overlapBottom = Math.abs(obstacleBoxScaled.getY() + obstacleBoxScaled.getHeight() - playerBoxScaled.getY());
 
-			// Get the smallest penetration
-			float minOverlap = Math.min(Math.min(overlapLeft, overlapRight), 
-				Math.min(overlapTop, overlapBottom)); 
+			// Find the smallest penetration
+			float minOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
 
 			// Return the side with the smallest penetration
 			if (minOverlap == overlapTop)
 			{
 				System.out.println("BOTTOM");
-				return "BOTTOM"; // The bottom of the player touches the top of the obstacle
+				return "BOTTOM";
 			}
 			if (minOverlap == overlapBottom)
 			{
 				System.out.println("TOP");
-				return "TOP"; // The top of the player touches the bottom of the obstacle
+				return "TOP";
 			}
 			if (minOverlap == overlapLeft)
 			{
 				System.out.println("RIGHT");
-				return "RIGHT"; // The right side of the player touches the left side of the obstacle
+				return "RIGHT";
 			}
 			if (minOverlap == overlapRight)
 			{
 				System.out.println("LEFT");
-				return "LEFT"; // The left side of the player touches the right side of the obstacle
+				return "LEFT";
 			}
 		}
 		
-		return "NONE"; // No collision
+		return "NONE";
 	}
 
 	void checkCollision()
@@ -224,7 +216,9 @@ public class Core
 						switch(collisionSide)
 						{
 							case "BOTTOM":
-								adjustment = playerColisionBox.getY() + playerColisionBox.getHeight() - obstacleBox.getY();
+								adjustment = Math.abs((playerColisionBox.getY() + playerColisionBox.getHeight()) - obstacleBox.getY());
+								// Réduire l'ajustement pour éviter un recul trop important
+								adjustment = Math.min(adjustment, 5.0f);
 								player.setPosition(new Vector2(
 									player.getPosition().getX(),
 									player.getPosition().getY() - adjustment
@@ -233,7 +227,7 @@ public class Core
 								break;
 								
 							case "TOP":
-								adjustment = obstacleBox.getY() + obstacleBox.getHeight() - playerColisionBox.getY();
+								adjustment = Math.abs(obstacleBox.getY() + obstacleBox.getHeight() - playerColisionBox.getY());
 								player.setPosition(new Vector2(
 									player.getPosition().getX(),
 									player.getPosition().getY() + adjustment
@@ -242,13 +236,20 @@ public class Core
 								break;
 								
 							case "LEFT":
-							case "RIGHT":
-								adjustment = collisionSide.equals("LEFT") ? 
-									obstacleBox.getX() + obstacleBox.getWidth() - playerColisionBox.getX() :
-									playerColisionBox.getX() + playerColisionBox.getWidth() - obstacleBox.getX();
-								
+								adjustment = Math.abs(obstacleBox.getX() + obstacleBox.getWidth() - playerColisionBox.getX());
 								player.setPosition(new Vector2(
-									player.getPosition().getX() + (collisionSide.equals("LEFT") ? adjustment : -adjustment),
+									player.getPosition().getX() + adjustment,
+									player.getPosition().getY()
+								));
+								player.movement.setVelocity(new Vector2(0, player.movement.getVelocity().getY()));
+								break;
+
+							case "RIGHT":
+								adjustment = Math.abs((playerColisionBox.getX() + playerColisionBox.getWidth()) - obstacleBox.getX());
+								// Réduire l'ajustement pour éviter un recul trop important
+								adjustment = Math.min(adjustment, 5.0f);
+								player.setPosition(new Vector2(
+									player.getPosition().getX() - adjustment,
 									player.getPosition().getY()
 								));
 								player.movement.setVelocity(new Vector2(0, player.movement.getVelocity().getY()));
@@ -330,7 +331,7 @@ public class Core
 		// Initialize the player position and size
 		Vector2 playerPos = new Vector2(0, 0);
 		Vector2 playerSize = new Vector2(64, 64);
-		Vector2 collBoxSize = new Vector2(38, 64);
+		Vector2 collBoxSize = new Vector2(30, 62);
 		int playerScale = 2;
 
 		// Initialize the player colision box
@@ -362,5 +363,6 @@ public class Core
 		collisionMap.setCollisionAt(1, 1, 1);
 		collisionMap.setCollisionAt(2, 2, 1);
 		collisionMap.setCollisionAt(3, 3, 1);
+		collisionMap.setCollisionAt(5, 5, 1);
 	}
 }
