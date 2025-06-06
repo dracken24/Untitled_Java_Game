@@ -118,6 +118,38 @@ public class Collisions
 				}
 			}
 		}
+
+		// Stop player on map frontier in X
+		if (player.getPosition().getX() > currentMap.getMapSize().getX() * currentMap.getTileSize().getX() - player.getOffset().getX() - (playerColisionBo.getWidth() / 2) * player.getScale())
+		{
+			player.setPosition(new Vector2(
+				currentMap.getMapSize().getX() * currentMap.getTileSize().getX() - player.getOffset().getX() - (playerColisionBo.getWidth() / 2) * player.getScale(),
+				player.getPosition().getY()
+			));
+		}
+		if (player.getPosition().getX() < 0 - player.getOffset().getX() + (playerColisionBo.getHeight()))
+		{
+			player.setPosition(new Vector2(
+				0 - player.getOffset().getX() + (playerColisionBo.getHeight()),
+				player.getPosition().getY()
+			));
+		}
+
+		// Stop player on map frontier in Y
+		if (player.getPosition().getY() > currentMap.getMapSize().getY() * currentMap.getTileSize().getY() - player.getOffset().getY() - (playerColisionBo.getHeight()) * player.getScale())
+		{
+			player.setPosition(
+				new Vector2(player.getPosition().getX(),
+				currentMap.getMapSize().getY() * currentMap.getTileSize().getY() - player.getOffset().getY() - (playerColisionBo.getHeight()) * player.getScale()
+			));
+		}
+		if (player.getPosition().getY() < 0 - player.getOffset().getY())
+		{
+			player.setPosition(
+				new Vector2(player.getPosition().getX(),
+				0 - player.getOffset().getY()
+			));
+		}
 	}
 
 	static String detectCollisionSide(Player player, Rectangle playerBoxScaled, Rectangle obstacleBox)

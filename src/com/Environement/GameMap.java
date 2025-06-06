@@ -7,7 +7,6 @@ import static com.raylib.Raylib.drawTexturePro;
 import com.raylib.Rectangle;
 import com.raylib.Vector2;
 
-
 public abstract class GameMap
 {
 /***********************************************************************************/
@@ -28,6 +27,7 @@ public abstract class GameMap
 
     protected Rectangle recForMap;
     protected Vector2 tileSize;
+    protected Vector2 mapSize; // tiles numbers
     protected int scale;
 
     public CollisionMap collisionMap;
@@ -36,7 +36,7 @@ public abstract class GameMap
 /***                                 CONSTRUCTOR                                   */
 /***********************************************************************************/
 
-    public GameMap(String name, String path_layer1, String path_layer2, String path_layer3,
+    public GameMap(String name, Vector2 mapSize, String path_layer1, String path_layer2, String path_layer3,
         String path_layer4, String path_layer5, String path_layer6,
             Rectangle recForMap, Vector2 tileSize, int scale, CollisionMap collisionMap)
     {
@@ -70,6 +70,7 @@ public abstract class GameMap
         this.recForMap = recForMap;
         this.scale = scale;
         this.tileSize = tileSize;
+        this.mapSize = mapSize;
 
         this.collisionMap = collisionMap;
     }
@@ -165,6 +166,18 @@ public abstract class GameMap
     {
         return name;
     }
+
+    public Vector2 getMapSize()
+    {
+        return mapSize;
+    }
+
+    public Vector2 getTileSize()
+    {
+        return tileSize;
+    }
+
+    
 
 /***********************************************************************************/
 /***                                 SETTERS                                       */	

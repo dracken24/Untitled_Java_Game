@@ -85,6 +85,7 @@ public class Core
 
 		GameMap map1 = new Cyty_01(
 			"Cyty_01",
+			new Vector2(48, 48),
 			"assets/Environement/City_01/town_01.png",
 			null,
 			null,
