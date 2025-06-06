@@ -1,17 +1,16 @@
 package com.player;
 
+import static com.raylib.Raylib.isKeyDown;
 import static com.raylib.Raylib.KeyboardKey.KEY_A;
 import static com.raylib.Raylib.KeyboardKey.KEY_D;
 import static com.raylib.Raylib.KeyboardKey.KEY_LEFT_SHIFT;
-import static com.raylib.Raylib.KeyboardKey.KEY_W;
 import static com.raylib.Raylib.KeyboardKey.KEY_S;
-import static com.raylib.Raylib.isKeyDown;
+import static com.raylib.Raylib.KeyboardKey.KEY_W;
 
-import com.raylib.Vector2;
-import com.raylib.Rectangle;
-
-import com.objects.SpriteSheet;
 import com.enums.SpriteMovement;
+import com.objects.SpriteSheet;
+import com.raylib.Rectangle;
+import com.raylib.Vector2;
 
 public class PlayerMovement
 {
@@ -42,7 +41,7 @@ public class PlayerMovement
     Vector2 velocity;
     Vector2 velocityMinMax_Y;
     Vector2 velocityMinMax_X;
-    Vector2 lastPlayerPosition;
+    // Vector2 lastPlayerPosition;
 
     Vector2 offset;
 
@@ -64,7 +63,7 @@ public class PlayerMovement
         this.velocityMinMax_Y = new Vector2(0, 4);
         this.velocityMinMax_X = new Vector2(0, 4);
 
-        this.lastPlayerPosition = new Vector2(0, 0);
+        // this.lastPlayerPosition = new Vector2(0, 0);
 
         this.isRunning = false;
     }
@@ -82,10 +81,6 @@ public class PlayerMovement
 		{
 			this.currentAction.resetCounter();
 		}
-
-		// this.currentAction.updateSprite(false, playerPosition, offset);
-        
-        // this.lastPlayerPosition = playerPosition;
 	}
 
     public void printPlayer(Vector2 playerPosition, Vector2 offset)
@@ -250,10 +245,10 @@ public class PlayerMovement
         return actionInProgress;
     }
 
-    public Vector2 getLastPosition()
-    {
-        return lastPlayerPosition;
-    }
+    // public Vector2 getLastPosition()
+    // {
+    //     return lastPlayerPosition;
+    // }
 
 /***********************************************************************************/
 /***                                 SETTERS                                       */
@@ -362,9 +357,9 @@ public class PlayerMovement
         }
     }
 
-    public void setLastPosition(Vector2 lastPosition)
-    {
-        this.lastPlayerPosition = lastPosition;
-    }
+    // public void setLastPosition(Vector2 lastPosition)
+    // {
+    //     this.lastPlayerPosition = lastPosition;
+    // }
 }
 

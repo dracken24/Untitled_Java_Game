@@ -84,6 +84,7 @@ public class Core
 		// mountCollMap(collisionMap);
 
 		GameMap map1 = new Cyty_01(
+			"Cyty_01",
 			"assets/Environement/City_01/town_01.png",
 			null,
 			null,
@@ -125,8 +126,7 @@ public class Core
 
 		endDrawing();
 		
-		player.movement.setLastPosition(player.getPosition());
-		player.setLastColisionBox(player.getColisionBox());
+
 
 		if (isKeyPressed(KEY_B))
 		{
@@ -163,14 +163,17 @@ public class Core
 		// Update the player
 		player.movement.applyMovement(player.getPosition(), player.getColisionBox(), player.movement.getVelocity());
 
-		drawText(
-			"X: " + (player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth()) +
-				" Y: " + (player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight()),
-			(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 100,
-			(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 100,
-			20,
-			GREEN
-		);
+		if (debugMode)
+		{
+			drawText(
+				"X: " + (player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth()) +
+					" Y: " + (player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight()),
+				(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 100,
+				(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 100,
+				20,
+				GREEN
+			);
+		}
 
 		// currentMap.collisionMap.printMap();
 	}

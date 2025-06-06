@@ -13,13 +13,11 @@ public class Player
 	public PlayerMovement	movement;
 
 	Vector2		position;		// Player position on World
-	Vector2		size;			// Player size
+	Vector2		size;			// Player sizeda
 	Vector2		offset;			// Player offset
 	float		scale;			// Player scale
 
 	Rectangle	colisionBox;	// Player colision box
-	Rectangle	lastColisionBox;	// Player last colision box
-	
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                 ***/
@@ -33,7 +31,6 @@ public class Player
 		this.size = size;
 		this.scale = scale;
 		this.colisionBox = colisionBox;
-		this.lastColisionBox = colisionBox;
 		this.offset = offset;
 	}
 
@@ -65,11 +62,6 @@ public class Player
 		return offset;
 	}
 
-	public Rectangle getLastColisionBox()
-	{
-		return lastColisionBox;
-	}
-
 	public Vector2 getSize()
 	{
 		return this.size;
@@ -97,10 +89,5 @@ public class Player
 	public void setOffset(Vector2 offset)
 	{
 		this.offset = offset;
-	}
-
-	public void setLastColisionBox(Rectangle lastColisionBox)
-	{
-		this.lastColisionBox = lastColisionBox;
 	}
 }

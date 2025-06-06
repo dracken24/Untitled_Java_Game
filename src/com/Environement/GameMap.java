@@ -14,6 +14,8 @@ public abstract class GameMap
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
 
+    protected String name;
+
     protected Texture layer1;		// Texture 1 of the sprite sheet
     protected Texture layer2;		// Texture 2 of the sprite sheet
     protected Texture layer3;		// Texture 3 of the sprite sheet
@@ -34,7 +36,7 @@ public abstract class GameMap
 /***                                 CONSTRUCTOR                                   */
 /***********************************************************************************/
 
-    public GameMap(String path_layer1, String path_layer2, String path_layer3,
+    public GameMap(String name, String path_layer1, String path_layer2, String path_layer3,
         String path_layer4, String path_layer5, String path_layer6,
             Rectangle recForMap, Vector2 tileSize, int scale, CollisionMap collisionMap)
     {
@@ -62,6 +64,8 @@ public abstract class GameMap
         {
             layer6 = loadTexture(path_layer6);
         }
+
+        this.name = name;
         
         this.recForMap = recForMap;
         this.scale = scale;
@@ -155,6 +159,11 @@ public abstract class GameMap
     public Texture getLayer6()
     {
         return layer6;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
 /***********************************************************************************/
