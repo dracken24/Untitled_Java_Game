@@ -45,7 +45,7 @@ public class Collisions
 		{
 			for (int j = 0; j < currentMap.collisionMap.getCollisionMap()[i].length; j++)
 			{
-				if (currentMap.collisionMap.getCollisionMap()[i][j] == 1)
+				if (currentMap.collisionMap.getCollisionMap()[i][j] == "1")
 				{
 					Rectangle obstacleBox = new Rectangle(i * 64, j * 64, 64, 64);
 

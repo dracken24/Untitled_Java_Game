@@ -28,7 +28,7 @@ public abstract class GameMap
     protected Rectangle recForMap;
     protected Vector2 tileSize;
     protected Vector2 mapSize; // tiles numbers
-    protected int scale;
+    protected float scale;
 
     public CollisionMap collisionMap;
 
@@ -38,7 +38,7 @@ public abstract class GameMap
 
     public GameMap(String name, Vector2 mapSize, String path_layer1, String path_layer2, String path_layer3,
         String path_layer4, String path_layer5, String path_layer6,
-            Rectangle recForMap, Vector2 tileSize, int scale, CollisionMap collisionMap)
+            Rectangle recForMap, Vector2 tileSize, float scale, CollisionMap collisionMap)
     {
         if (path_layer1 != null)
         {
@@ -68,6 +68,7 @@ public abstract class GameMap
         this.name = name;
         
         this.recForMap = recForMap;
+
         this.scale = scale;
         this.tileSize = tileSize;
         this.mapSize = mapSize;

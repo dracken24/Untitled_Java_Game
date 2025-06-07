@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import com.Environement.CollisionMap;
 import com.Environement.GameMap;
 import com.MapsBuild.Cyty_01;
+import com.MapsBuild.Donjon_outside;
 import com.enums.PlayerType;
 import com.player.InitPlayer;
 import com.player.Player;
@@ -77,31 +78,7 @@ public class Core
 		// Set the target to follow the player
 		cameras.setTargetToFollow(player.getPosition());
 
-		// Initialize the maps
-		allMaps = new ArrayList<>();
-
-		CollisionMap collisionMap = new CollisionMap(new Vector2(48, 48), new Vector2(64, 64), 2);
-		// mountCollMap(collisionMap);
-
-		GameMap map1 = new Cyty_01(
-			"Cyty_01",
-			new Vector2(48, 48),
-			"assets/Environement/City_01/town_01.png",
-			null,
-			null,
-			"assets/Environement/City_01/town_01_top_player.png",
-			null,
-			null,
-			new Rectangle(0, 0, 1536, 1536),
-			new Vector2(64, 64),
-			2,
-			collisionMap
-		);
-		map1.collisionMap.printMap();
-
-		allMaps.add(map1);
-
-		currentMap = map1;
+		initMaps();
 	}
 
 /***********************************************************************************/
@@ -228,11 +205,50 @@ public class Core
 		new InitPlayer(PlayerType.WARRIOR, player, playerPos, playerSize, playerScale);
 	}
 
-	// void mountCollMap(CollisionMap collisionMap)
-	// {
-	// 	collisionMap.setCollisionAt(1, 1, 1);
-	// 	collisionMap.setCollisionAt(2, 2, 1);
-	// 	collisionMap.setCollisionAt(3, 3, 1);
-	// 	collisionMap.setCollisionAt(5, 5, 1);
-	// }
+	void initMaps()
+	{
+		// Initialize the maps
+		this.allMaps = new ArrayList<>();
+
+		CollisionMap collisionMap = new CollisionMap(new Vector2(63, 63), new Vector2(64, 64), 2);
+		
+		GameMap donjon_outside = new Donjon_outside(
+			"Donjon_outside",
+			new Vector2(72, 72),
+			"assets/Environement/Dungeon_Outside/Donjon_Entry.png",
+			null,
+			null,
+			null,
+			null,
+			null,
+			new Rectangle(2000, 2000, 1728, 1728),
+			new Vector2(56, 56),
+			2.333333333333337f,
+			collisionMap
+		);
+		donjon_outside.collisionMap.printMap();
+		this.allMaps.add(donjon_outside);
+			
+		CollisionMap collisionMap2 = new CollisionMap(new Vector2(48, 48), new Vector2(64, 64), 2);
+
+		GameMap cyty_01 = new Cyty_01(
+			"Cyty_01",
+			new Vector2(48, 48),
+			"assets/Environement/City_01/town_01.png",
+			null,
+			null,
+			"assets/Environement/City_01/town_01_top_player.png",
+			null,
+			null,
+			new Rectangle(0, 0, 1536, 1536),
+			new Vector2(64, 64),
+			2,
+			collisionMap2
+		);
+		cyty_01.collisionMap.printMap();
+
+		this.allMaps.add(cyty_01);
+
+		this.currentMap = cyty_01;
+	}
 }
