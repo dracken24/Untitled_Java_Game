@@ -70,10 +70,10 @@ public class CollisionMap
         {
             throw new IndexOutOfBoundsException("CollisionMap index out of bounds");
         }
-        if (value != "0" && value != "1")
-        {
-            throw new IllegalArgumentException("CollisionMap value must be 0 or 1");
-        }
+        // if (value != "0" && value != "1")
+        // {
+        //     throw new IllegalArgumentException("CollisionMap value must be 0 or 1");
+        // }
 
         collisionMap[x][y] = value;
     }

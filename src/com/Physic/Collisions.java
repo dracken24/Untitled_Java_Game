@@ -17,8 +17,9 @@ public class Collisions
 {
 	public static Color PINK_SHADOW = new Color((byte)255, (byte)100, (byte)255, (byte)100);
 	public static Color BLUE_SHADOW = new Color((byte)100, (byte)100, (byte)255, (byte)100);
+	public static Color YELLOW_SHADOW = new Color((byte)255, (byte)255, (byte)100, (byte)100);
 
-	public static void checkCollision(Player player, GameMap currentMap)
+	public static String checkCollision(Player player, GameMap currentMap)
 	{
 		Rectangle playerColisionBo = new Rectangle(
 			player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth(),
@@ -45,9 +46,27 @@ public class Collisions
 		{
 			for (int j = 0; j < currentMap.collisionMap.getCollisionMap()[i].length; j++)
 			{
+				Rectangle obstacleBox = new Rectangle(i * 64, j * 64, 64, 64);
+
+				// check if plager hit change map tyle
+				if (currentMap.collisionMap.getCollisionMap()[i][j].length() > 1)
+				{
+					if (Core.debugMode)
+					{
+						// NOTE: draw the obstacle box
+						drawRectangle(i * 64, j * 64, 64, 64, YELLOW_SHADOW);
+					}
+
+					if (checkCollisionRecs(playerBoxScaled, obstacleBox))
+					{
+						System.out.println("Returned map name: " + currentMap.collisionMap.getCollisionMap()[i][j]);
+						return currentMap.collisionMap.getCollisionMap()[i][j];
+					}
+				}
+
+				// check if plager hit obstacle tyle
 				if (currentMap.collisionMap.getCollisionMap()[i][j] == "1")
 				{
-					Rectangle obstacleBox = new Rectangle(i * 64, j * 64, 64, 64);
 
 					if (Core.debugMode)
 					{
@@ -150,6 +169,8 @@ public class Collisions
 				0 - player.getOffset().getY()
 			));
 		}
+
+		return null;
 	}
 
 	static String detectCollisionSide(Player player, Rectangle playerBoxScaled, Rectangle obstacleBox)
@@ -197,5 +218,10 @@ public class Collisions
 		}
 		
 		return "NONE";
+	}
+
+	void changeMap(String mapName)
+	{
+		System.out.println(mapName);
 	}
 }

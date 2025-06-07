@@ -30,6 +30,8 @@ public abstract class GameMap
     protected Vector2 mapSize; // tiles numbers
     protected float scale;
 
+    protected Vector2 playerPositionStart;
+
     public CollisionMap collisionMap;
 
 /***********************************************************************************/
@@ -74,6 +76,8 @@ public abstract class GameMap
         this.mapSize = mapSize;
 
         this.collisionMap = collisionMap;
+
+        this.playerPositionStart = new Vector2(0, 0);
     }
 
 /***********************************************************************************/
@@ -178,7 +182,10 @@ public abstract class GameMap
         return tileSize;
     }
 
-    
+    public Vector2 getPlayerPositionStart()
+    {
+        return playerPositionStart;
+    }
 
 /***********************************************************************************/
 /***                                 SETTERS                                       */	

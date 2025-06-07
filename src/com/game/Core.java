@@ -136,7 +136,18 @@ public class Core
 		currentMap.drawLayer(6);
 
 		// Check collision before applying movement
-		Collisions.checkCollision(player, currentMap);
+		String mapName = Collisions.checkCollision(player, currentMap);
+		if (mapName != null)
+		{
+			for (GameMap map : allMaps)
+			{
+				if (map.getName().equals(mapName))
+				{
+					this.currentMap = map;
+					setPlayerToStartPosition();
+				}
+			}
+		}
 		
 		// Update the player
 		player.movement.applyMovement(player.getPosition(), player.getColisionBox(), player.movement.getVelocity());
@@ -176,7 +187,7 @@ public class Core
 	void initPlayer()
 	{
 		// Initialize the player position and size
-		Vector2 playerPos = new Vector2(0, 1400);
+		Vector2 playerPos = new Vector2(0, 0);
 		Vector2 playerSize = new Vector2(64, 64);
 		Vector2 collBoxSize = new Vector2(28, 28);
 		int playerScale = 2;
@@ -250,5 +261,16 @@ public class Core
 		this.allMaps.add(cyty_01);
 
 		this.currentMap = cyty_01;
+
+		setPlayerToStartPosition();
+	}
+
+	void setPlayerToStartPosition()
+	{
+		Vector2 playerPosStart = new Vector2(this.currentMap.getPlayerPositionStart().getX(), this.currentMap.getPlayerPositionStart().getY());
+		playerPosStart.setX(playerPosStart.getX() - player.getOffset().getX() + player.getColisionBox().getWidth() / 2 * player.getScale());
+		playerPosStart.setY(playerPosStart.getY() - player.getOffset().getY());
+
+		player.setPosition(playerPosStart);
 	}
 }
