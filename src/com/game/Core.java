@@ -26,10 +26,11 @@ import com.raylib.Color;
 
 import java.util.ArrayList;
 
-import com.Environement.CollisionMap;
+// import com.Environement.CollisionMap;
+import com.Environement.InitAllMaps;
 import com.Environement.GameMap;
-import com.MapsBuild.Cyty_01;
-import com.MapsBuild.Donjon_outside;
+// import com.MapsBuild.Cyty_01;
+import com.Utility.ForBuildGame;
 import com.enums.PlayerType;
 import com.player.InitPlayer;
 import com.player.Player;
@@ -46,6 +47,7 @@ public class Core
 	String		title;				// Window title
 
 	Player		player;				// Player
+	Vector2		playerPosForSeeCollisions;				// Player
 
 	Cameras	cameras;				// Cameras
 
@@ -72,20 +74,23 @@ public class Core
 		initWindow((int)WindowSize.getX(), (int)WindowSize.getY(), title);
         setTargetFPS(60);
 
-		// Initialize the player
-		initPlayer();
-
 		// Initialize the cameras
 		cameras = new Cameras();
-
+		
 		// Initialize the main camera
 		Rectangle recForCam = new Rectangle(0, 0, windowSize.getX(), windowSize.getY());
 		cameras.initOneCamera(cameras.getMainCamera(), recForCam, windowSize);
 		cameras.getMainCamera().setOffset(new Vector2(0, 0));
+		
+		// Initialize the player
+		InitPlayer initPlayer = new InitPlayer(PlayerType.WARRIOR, player, windowSize);
+		this.player = initPlayer.getPlayer();
+		this.playerPosForSeeCollisions = this.player.getPosition();
 
 		// Set the target to follow the player
 		cameras.setTargetToFollow(player.getPosition());
 
+		// Init All Maps
 		initMaps();
 	}
 
@@ -98,61 +103,16 @@ public class Core
 		// For adjust the camera to follow the player
 		followCamera(player.getPosition());
 
-		beginDrawing();
-			beginTextureMode(cameras.getMainTexture());
-				clearBackground(LIGHTGRAY);
-				beginMode2D(cameras.getMainCamera());
-				
-				onDrawning();
+		stopPlayerOnLoading();
 
-				endMode2D();
-			endTextureMode();
+		// Update the player
+		player.movement.applyMovement(player.getPosition(), player.movement.getVelocity());
+		this.playerPosForSeeCollisions = this.player.getPosition();
 
-			renderOnScreen();
-
-		endDrawing();
-		
-
-
-		if (isKeyPressed(KEY_B))
-		{
-			debugMode = !debugMode;
-		}
-	}
-
-	void followCamera(Vector2 targetPosition)
-	{
-		Camera2D mainCam = cameras.getMainCamera();
-		mainCam.setTarget(targetPosition);
-	}
-
-	void onDrawning()
-	{
-		// drawText("Untitled Action RPG Game", 470, 150, 20, VIOLET);
-
-		// Draw Map layer under the player
-		currentMap.drawLayer(1);
-		currentMap.drawLayer(2);
-		currentMap.drawLayer(3);
-
-			if (this.loadingCounter == 0)
-			{
-				player.update();
-			}
-			else
-			{
-				player.movement.setVelocity(new Vector2( 0, 0));
-				player.movement.setCurrentAction(player.movement.getIdle());
-			}
-
-			player.movement.printPlayer(player.getPosition(), player.getOffset());
-
-		// Draw Map layer over the player
-		currentMap.drawLayer(4);
-		currentMap.drawLayer(5);
-		currentMap.drawLayer(6);
-
-		// Check collision before applying movement
+		/* 
+		*	Check collision before applying movement.
+		*	Keep here to see collision box on drawning.
+		*/
 		String mapName = Collisions.checkCollision(player, currentMap);
 		if (mapName != null)
 		{
@@ -167,21 +127,49 @@ public class Core
 
 			this.loadingCounter = 80;
 		}
-		
-		// Update the player
-		player.movement.applyMovement(player.getPosition(), player.getColisionBox(), player.movement.getVelocity());
 
-		if (debugMode)
+		// Render on screen
+		beginDrawing();
+			beginTextureMode(cameras.getMainTexture());
+				clearBackground(LIGHTGRAY);
+				beginMode2D(cameras.getMainCamera());
+				
+				onDrawning();
+
+				endMode2D();
+			endTextureMode();
+
+			// followCamera(player.getPosition());
+			renderOnScreen();
+
+		endDrawing();
+
+		// // Update the player
+		// player.movement.applyMovement(player.getPosition(), player.movement.getVelocity());
+		// this.playerPosForSeeCollisions = this.player.getPosition();
+
+		// TODO: for see collision and other stuff in debug mode. Remove in real game
+		if (isKeyPressed(KEY_B))
 		{
-			drawText(
-				"X: " + (player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth()) +
-					" Y: " + (player.getPosition().getY() + player.getOffset().getY()),
-				(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 100,
-				(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 100,
-				20,
-				GREEN
-			);
+			debugMode = !debugMode;
 		}
+	}
+
+	void onDrawning()
+	{
+		// Draw Map layer under the player
+		currentMap.drawLayer(1);
+		currentMap.drawLayer(2);
+		currentMap.drawLayer(3);
+
+			player.movement.printPlayer(player.getPosition(), player.getOffset());
+
+		// Draw Map layer over the player
+		currentMap.drawLayer(4);
+		currentMap.drawLayer(5);
+		currentMap.drawLayer(6);
+
+		ForBuildGame.printCollision(this.player, this.playerPosForSeeCollisions, this.currentMap, this.WindowSize);
 
 		if (this.loadingCounter > 0)
 		{
@@ -196,8 +184,6 @@ public class Core
 			);
 
 			this.loadingCounter--;
-
-			// BLACK_SHADOW.setA((byte)((int)BLACK_SHADOW.getA() + (int)5));
 		}
 	}
 
@@ -217,86 +203,20 @@ public class Core
 		);
 	}
 
-	// Initialize the player scale, size, position, colision box size and offset
-	void initPlayer()
-	{
-		// Initialize the player position and size
-		Vector2 playerPos = new Vector2(0, 0);
-		Vector2 playerSize = new Vector2(64, 64);
-		Vector2 collBoxSize = new Vector2(28, 28);
-		int playerScale = 2;
-
-		// Initialize the player colision box
-		Rectangle playerColisionSize = new Rectangle(
-			-(playerSize.getX() / 2 * playerScale),
-			-(playerSize.getY() / 2 * playerScale) + ((playerSize.getY() - collBoxSize.getY()) * playerScale) - playerScale,
-			collBoxSize.getX(),
-			collBoxSize.getY()
-		);
-
-		// Initialize the player offset to center the player on the screen
-		Vector2 playerOffset = new Vector2(WindowSize.getX() / 2, WindowSize.getY() / 2);
-
-		// Create the player
-		player = new Player(
-			playerPos,
-			playerSize,
-			playerColisionSize,
-			playerScale,
-			playerOffset
-		);
-
-		// Initialize the player
-		new InitPlayer(PlayerType.WARRIOR, player, playerPos, playerSize, playerScale);
-	}
-
 	void initMaps()
 	{
 		// Initialize the maps
 		this.allMaps = new ArrayList<>();
 
-		CollisionMap collisionMap = new CollisionMap(new Vector2(63, 63), new Vector2(64, 64), 2);
-		
-		GameMap donjon_outside = new Donjon_outside(
-			"Donjon_outside",
-			new Vector2(72, 72),
-			"assets/Environement/Dungeon_Outside/Donjon_Entry.png",
-			null,
-			null,
-			null,
-			null,
-			null,
-			new Rectangle(2000, 2000, 1728, 1728),
-			new Vector2(56, 56),
-			2.333333333333337f,
-			collisionMap
-		);
-		donjon_outside.collisionMap.printMap();
-		this.allMaps.add(donjon_outside);
-			
-		CollisionMap collisionMap2 = new CollisionMap(new Vector2(48, 48), new Vector2(64, 64), 2);
-
-		GameMap cyty_01 = new Cyty_01(
-			"Cyty_01",
-			new Vector2(48, 48),
-			"assets/Environement/City_01/town_01.png",
-			null,
-			null,
-			"assets/Environement/City_01/town_01_top_player.png",
-			null,
-			null,
-			new Rectangle(0, 0, 1536, 1536),
-			new Vector2(64, 64),
-			2,
-			collisionMap2
-		);
-		cyty_01.collisionMap.printMap();
-
-		this.allMaps.add(cyty_01);
-
-		this.currentMap = cyty_01;
+		this.currentMap = InitAllMaps.initAll(allMaps);
 
 		setPlayerToStartPosition();
+	}
+
+		void followCamera(Vector2 targetPosition)
+	{
+		Camera2D mainCam = cameras.getMainCamera();
+		mainCam.setTarget(targetPosition);
 	}
 
 	void setPlayerToStartPosition()
@@ -306,5 +226,18 @@ public class Core
 		playerPosStart.setY(playerPosStart.getY() - player.getOffset().getY());
 
 		player.setPosition(playerPosStart);
+	}
+
+	void stopPlayerOnLoading()
+	{
+		if (this.loadingCounter == 0)
+		{
+			player.update();
+		}
+		else
+		{
+			player.movement.setVelocity(new Vector2( 0, 0));
+			player.movement.setCurrentAction(player.movement.getIdle());
+		}
 	}
 }

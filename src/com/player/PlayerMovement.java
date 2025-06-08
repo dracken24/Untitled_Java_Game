@@ -88,13 +88,10 @@ public class PlayerMovement
         this.currentAction.updateSprite(false, playerPosition, offset);
     }
 
-    public Vector2 applyMovement(Vector2 position, Rectangle colisionBox, Vector2 velocity)
+    public Vector2 applyMovement(Vector2 position , Vector2 velocity)
     {
         position.setX(position.getX() + velocity.getX());
-        colisionBox.setX(colisionBox.getX() + velocity.getX());
-
         position.setY(position.getY() + velocity.getY());
-        colisionBox.setY(colisionBox.getY() + velocity.getY());
 
         return position;
     }
@@ -244,11 +241,6 @@ public class PlayerMovement
     {
         return actionInProgress;
     }
-
-    // public Vector2 getLastPosition()
-    // {
-    //     return lastPlayerPosition;
-    // }
 
 /***********************************************************************************/
 /***                                 SETTERS                                       */

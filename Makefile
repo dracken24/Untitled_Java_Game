@@ -18,7 +18,9 @@ JAVA_FILES = src/App.java \
             src/com/Physic/Collisions.java \
             src/com/MapsBuild/Cyty_01.java \
             src/com/MapsBuild/Donjon_outside.java \
-            
+            src/com/Environement/InitAllMaps.java \
+            src/com/Utility/ForBuildGame.java \
+
 all: compile
 
 compile:

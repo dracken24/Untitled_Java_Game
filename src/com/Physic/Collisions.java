@@ -1,9 +1,6 @@
 package com.Physic;
 
-import static com.raylib.Raylib.RED;
 import static com.raylib.Raylib.checkCollisionRecs;
-import static com.raylib.Raylib.drawRectangle;
-import static com.raylib.Raylib.drawRectangleRec;
 
 import com.raylib.Color;
 import com.raylib.Rectangle;
@@ -11,7 +8,6 @@ import com.raylib.Vector2;
 
 import com.Environement.GameMap;
 import com.player.Player;
-import com.game.Core;
 
 public class Collisions
 {
@@ -21,6 +17,11 @@ public class Collisions
 
 	public static String checkCollision(Player player, GameMap currentMap)
 	{
+		boolean hitRight = false;
+		boolean hitLeft = false;
+		boolean hitUp = false;
+		boolean hitDown = false;
+
 		Rectangle playerColisionBo = new Rectangle(
 			player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth(),
 			player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight(),
@@ -35,12 +36,6 @@ public class Collisions
 				playerColisionBo.getWidth() * player.getScale(),
 				playerColisionBo.getHeight() * player.getScale()
 		);
-		
-		if (Core.debugMode)
-		{
-			// NOTE: draw the player box
-			drawRectangleRec(playerBoxScaled, PINK_SHADOW);
-		}
 
 		for (int i = 0; i < currentMap.collisionMap.getCollisionMap().length; i++)
 		{
@@ -51,12 +46,6 @@ public class Collisions
 				// check if plager hit change map tyle
 				if (currentMap.collisionMap.getCollisionMap()[i][j].length() > 1)
 				{
-					if (Core.debugMode)
-					{
-						// NOTE: draw the obstacle box
-						drawRectangle(i * 64, j * 64, 64, 64, YELLOW_SHADOW);
-					}
-
 					if (checkCollisionRecs(playerBoxScaled, obstacleBox))
 					{
 						System.out.println("Returned map name: " + currentMap.collisionMap.getCollisionMap()[i][j]);
@@ -67,113 +56,126 @@ public class Collisions
 				// check if plager hit obstacle tyle
 				if (currentMap.collisionMap.getCollisionMap()[i][j] == "1")
 				{
-
-					if (Core.debugMode)
-					{
-						// NOTE: draw the obstacle box
-						drawRectangle(i * 64, j * 64, 64, 64, BLUE_SHADOW);
-					}
-					
 					String collisionSide = detectCollisionSide(player, playerBoxScaled, obstacleBox);
 					
 					if (!collisionSide.equals("NONE"))
 					{
-						if (Core.debugMode)
-						{
-							// NOTE: draw the obstacle box hit
-							drawRectangle(i * 64, j * 64, 64, 64, RED);
-						}
-						
 						float adjustment = 0;
 						switch(collisionSide)
 						{
 							case "BOTTOM":
-								adjustment = Math.abs((playerBoxScaled.getY() + playerBoxScaled.getHeight()) - obstacleBox.getY());
-								
-								adjustment = Math.min(adjustment, 5.0f);
+								if (hitDown == false)
+								{
+									// break;
+									adjustment = Math.abs((playerBoxScaled.getY() + playerBoxScaled.getHeight()) - obstacleBox.getY());
+									
+									adjustment = Math.min(adjustment, 5.0f);
+								}
 								player.setPosition(new Vector2(
 									player.getPosition().getX(),
 									player.getPosition().getY() - adjustment
 								));
 								player.movement.setVelocity(new Vector2(player.movement.getVelocity().getX(), 0));
+
+								hitDown = true;
 								break;
 								
 							case "TOP":
-								adjustment = Math.abs(obstacleBox.getY() + obstacleBox.getHeight() - playerBoxScaled.getY());
+								if (hitUp == false)
+								{
+									adjustment = Math.abs(obstacleBox.getY() + obstacleBox.getHeight() - playerBoxScaled.getY());
+									// break;
+								}
+
 								player.setPosition(new Vector2(
 									player.getPosition().getX(),
 									player.getPosition().getY() + adjustment
 								));
 								player.movement.setVelocity(new Vector2(player.movement.getVelocity().getX(), 0));
+
+								hitUp = true;
 								break;
 								
 							case "LEFT":
-								adjustment = Math.abs(obstacleBox.getX() + obstacleBox.getWidth() - playerBoxScaled.getX());
+								if (hitLeft == false)
+								{
+									// break;
+									adjustment = Math.abs(obstacleBox.getX() + obstacleBox.getWidth() - playerBoxScaled.getX());
+								}
+
 								player.setPosition(new Vector2(
 									player.getPosition().getX() + adjustment,
 									player.getPosition().getY()
 								));
 								player.movement.setVelocity(new Vector2(0, player.movement.getVelocity().getY()));
+
+								hitLeft = true;
 								break;
 
 							case "RIGHT":
-								adjustment = Math.abs((playerBoxScaled.getX() + playerBoxScaled.getWidth()) - obstacleBox.getX());
-								
-								adjustment = Math.min(adjustment, 5.0f);
+								if (hitRight == false)
+								{
+									// break;
+									adjustment = Math.abs((playerBoxScaled.getX() + playerBoxScaled.getWidth()) - obstacleBox.getX());
+									
+									adjustment = Math.min(adjustment, 5.0f);
+								}
+
 								player.setPosition(new Vector2(
 									player.getPosition().getX() - adjustment,
 									player.getPosition().getY()
 								));
 								player.movement.setVelocity(new Vector2(0, player.movement.getVelocity().getY()));
+
+								hitRight = true;
 								break;
 						}
-						
-						// Update the collision box after the movement
-						Rectangle colBox = player.getColisionBox();
-						colBox.setX(player.getPosition().getX() - player.getSize().getX());
-						colBox.setY(player.getPosition().getY() - player.getSize().getY());
-						player.setColisionBox(colBox);
 					}
 				}
 			}
 		}
 
 		// Stop player on map frontier in X
-		if (player.getPosition().getX() > currentMap.getMapSize().getX() * currentMap.getTileSize().getX() - player.getOffset().getX() - (playerColisionBo.getWidth() / 2) * player.getScale())
+		if (player.getPosition().getX() > currentMap.getMapSize().getX() * currentMap.getTileSize().getX()
+			- player.getOffset().getX() - (playerColisionBo.getWidth() / 2) * player.getScale())
 		{
 			player.setPosition(new Vector2(
-				currentMap.getMapSize().getX() * currentMap.getTileSize().getX() - player.getOffset().getX() - (playerColisionBo.getWidth() / 2) * player.getScale(),
+				currentMap.getMapSize().getX() * currentMap.getTileSize().getX() - player.getOffset().getX()
+					-(playerColisionBo.getWidth() / 2) * player.getScale(),
 				player.getPosition().getY()
 			));
 		}
-		if (player.getPosition().getX() < 0 - player.getOffset().getX() + (playerColisionBo.getHeight()))
+		if (player.getPosition().getX() < -player.getOffset().getX() + (playerColisionBo.getHeight()))
 		{
 			player.setPosition(new Vector2(
-				0 - player.getOffset().getX() + (playerColisionBo.getHeight()),
+				-player.getOffset().getX() + (playerColisionBo.getHeight()),
 				player.getPosition().getY()
 			));
 		}
 
 		// Stop player on map frontier in Y
-		if (player.getPosition().getY() > currentMap.getMapSize().getY() * currentMap.getTileSize().getY() - player.getOffset().getY() - (playerColisionBo.getHeight()) * player.getScale())
+		if (player.getPosition().getY() > currentMap.getMapSize().getY() * currentMap.getTileSize().getY()
+			- player.getOffset().getY() - (playerColisionBo.getHeight()) * player.getScale())
 		{
 			player.setPosition(
-				new Vector2(player.getPosition().getX(),
-				currentMap.getMapSize().getY() * currentMap.getTileSize().getY() - player.getOffset().getY() - (playerColisionBo.getHeight()) * player.getScale()
+				new Vector2(
+					player.getPosition().getX(),
+					currentMap.getMapSize().getY() * currentMap.getTileSize().getY() - player.getOffset().getY()
+						- (playerColisionBo.getHeight()) * player.getScale()
 			));
 		}
-		if (player.getPosition().getY() < 0 - player.getOffset().getY())
+		if (player.getPosition().getY() < -player.getOffset().getY())
 		{
 			player.setPosition(
 				new Vector2(player.getPosition().getX(),
-				0 - player.getOffset().getY()
+				-player.getOffset().getY()
 			));
 		}
 
 		return null;
 	}
 
-	static String detectCollisionSide(Player player, Rectangle playerBoxScaled, Rectangle obstacleBox)
+	public static String detectCollisionSide(Player player, Rectangle playerBoxScaled, Rectangle obstacleBox)
 	{
 		Rectangle obstacleBoxScaled = new Rectangle(
 			obstacleBox.getX(),
@@ -225,3 +227,4 @@ public class Collisions
 		System.out.println(mapName);
 	}
 }
+
