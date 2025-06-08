@@ -17,10 +17,12 @@ import static com.raylib.Raylib.setTargetFPS;
 
 import static com.raylib.Raylib.KeyboardKey.KEY_B;
 import static com.raylib.Raylib.isKeyPressed;	
+import static com.raylib.Raylib.drawRectangle;
 
 import com.raylib.Camera2D;
 import com.raylib.Rectangle;
 import com.raylib.Vector2;
+import com.raylib.Color;
 
 import java.util.ArrayList;
 
@@ -51,6 +53,10 @@ public class Core
 	GameMap		currentMap;
 	// Collisions collision;
 	public static boolean debugMode = true;
+	
+	int	loadingCounter;
+	
+	public static Color BLACK_SHADOW = new Color((byte)0, (byte)0, (byte)0, (byte)255);
 
 /***********************************************************************************/
 /***                                 CONSTRUCTOR                                   */
@@ -58,9 +64,11 @@ public class Core
 
 	public Core(Vector2 windowSize, String title)
 	{
+
 		// Initialize the window
 		WindowSize = windowSize;
 		this.title = title;
+		this.loadingCounter = 0;
 		initWindow((int)WindowSize.getX(), (int)WindowSize.getY(), title);
         setTargetFPS(60);
 
@@ -126,8 +134,17 @@ public class Core
 		currentMap.drawLayer(1);
 		currentMap.drawLayer(2);
 		currentMap.drawLayer(3);
-		
-			player.update();
+
+			if (this.loadingCounter == 0)
+			{
+				player.update();
+			}
+			else
+			{
+				player.movement.setVelocity(new Vector2( 0, 0));
+				player.movement.setCurrentAction(player.movement.getIdle());
+			}
+
 			player.movement.printPlayer(player.getPosition(), player.getOffset());
 
 		// Draw Map layer over the player
@@ -147,6 +164,8 @@ public class Core
 					setPlayerToStartPosition();
 				}
 			}
+
+			this.loadingCounter = 80;
 		}
 		
 		// Update the player
@@ -156,7 +175,7 @@ public class Core
 		{
 			drawText(
 				"X: " + (player.getPosition().getX() + player.getOffset().getX() - player.getColisionBox().getWidth()) +
-					" Y: " + (player.getPosition().getY() + player.getOffset().getY() - player.getColisionBox().getHeight()),
+					" Y: " + (player.getPosition().getY() + player.getOffset().getY()),
 				(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 100,
 				(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 100,
 				20,
@@ -164,7 +183,22 @@ public class Core
 			);
 		}
 
-		// currentMap.collisionMap.printMap();
+		if (this.loadingCounter > 0)
+		{
+			drawRectangle((int)player.getPosition().getX(), (int)player.getPosition().getY(), (int)WindowSize.getX(), (int)WindowSize.getY(), BLACK_SHADOW);
+
+			drawText(
+				"Loading ...",
+				(int)player.getPosition().getX() + (int)WindowSize.getX() / 2 - 180,
+				(int)player.getPosition().getY() + (int)WindowSize.getY() / 2 - 80,
+				80,
+				GREEN
+			);
+
+			this.loadingCounter--;
+
+			// BLACK_SHADOW.setA((byte)((int)BLACK_SHADOW.getA() + (int)5));
+		}
 	}
 
 	void renderOnScreen()
