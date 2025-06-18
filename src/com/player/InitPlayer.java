@@ -1,4 +1,5 @@
 package com.player;
+import com.player.Type.Warior;
 
 import com.objects.SpriteSheet;
 import com.raylib.Vector2;
@@ -11,6 +12,7 @@ public class InitPlayer
 /***********************************************************************************/
 /***                                 VARIABLES                                     */
 /***********************************************************************************/
+
 	Player	player;
 	Vector2	playerPos;
 	Vector2	playerSize;
@@ -22,29 +24,7 @@ public class InitPlayer
 
 	public InitPlayer(PlayerType playerType, Player player, Vector2 WindowSize)
     {
-		InitBasePlayer(WindowSize);
-
-		switch (playerType)
-		{
-			case WARRIOR:
-                initWarrior();
-				break;
-			// case FIGHTER:
-            //     initFighter(player, playerSize, playerPos, scale);
-			// 	break;
-			// case SAMURAI:
-            //     initSamurai(player, playerSize, playerPos, scale);
-			// 	break;
-		}
-    }
-
-/***********************************************************************************/
-/***                                 FUNCTIONS                                     */
-/***********************************************************************************/
-
-	// Initialize the player scale, size, position, colision box size and offset
-	public void InitBasePlayer(Vector2 WindowSize)
-	{
+		// InitBasePlayer(WindowSize);
 		// Initialize the player position and size
 		this.playerPos = new Vector2(0, 0);
 		this.playerSize = new Vector2(64, 64);
@@ -62,8 +42,27 @@ public class InitPlayer
 		// Initialize the player offset to center the player on the screen
 		Vector2 playerOffset = new Vector2(WindowSize.getX() / 2, WindowSize.getY() / 2);
 
-		// Create the player
-		this.player = new Player(
+		switch (playerType)
+		{
+			case WARRIOR:
+				initWarrior(playerColisionSize, playerOffset);
+				break;
+			// case FIGHTER:
+            //     initFighter(player, playerSize, playerPos, scale);
+			// 	break;
+			// case SAMURAI:
+            //     initSamurai(player, playerSize, playerPos, scale);
+			// 	break;
+		}
+    }
+
+/***********************************************************************************/
+/***                                 FUNCTIONS                                     */
+/***********************************************************************************/
+
+    private void initWarrior(Rectangle playerColisionSize, Vector2 playerOffset)
+    {
+		this.player = new Warior(
 			this.playerPos,
 			this.playerSize,
 			playerColisionSize,
@@ -71,12 +70,6 @@ public class InitPlayer
 			playerOffset
 		);
 
-		// Initialize the player
-		// new InitPlayer(PlayerType.WARRIOR, player, playerPos, playerSize, playerScale);
-	}
-
-    private void initWarrior()
-    {
 		// Idle
         player.movement.setIdle(new SpriteSheet(
 			"assets/Players/Player_Test_48x72/pTest_Idle.png",

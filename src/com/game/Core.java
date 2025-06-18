@@ -109,10 +109,7 @@ public class Core
 		player.movement.applyMovement(player.getPosition(), player.movement.getVelocity());
 		this.playerPosForSeeCollisions = this.player.getPosition();
 
-		/* 
-		*	Check collision before applying movement.
-		*	Keep here to see collision box on drawning.
-		*/
+		// Check for map changing
 		String mapName = Collisions.checkCollision(player, currentMap);
 		if (mapName != null)
 		{

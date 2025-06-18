@@ -4,7 +4,7 @@ import com.raylib.Vector2;
 
 import com.raylib.Rectangle;
 
-public class Player
+public abstract class Player
 {
 /***********************************************************************************/
 /***                                 VARIABLES                                   ***/

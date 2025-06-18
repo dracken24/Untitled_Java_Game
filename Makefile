@@ -20,6 +20,7 @@ JAVA_FILES = src/App.java \
             src/com/MapsBuild/Donjon_outside.java \
             src/com/Environement/InitAllMaps.java \
             src/com/Utility/ForBuildGame.java \
+            src/com/player/Type/Warior.java \
 
 all: compile
 

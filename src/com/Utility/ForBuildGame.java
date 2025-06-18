@@ -76,7 +76,7 @@ public class ForBuildGame
 						drawRectangle(i * 64, j * 64, 64, 64, Collisions.BLUE_SHADOW);
 						
 						String collisionSide = Collisions.detectCollisionSide(player, playerBoxScaled, obstacleBox);
-						System.out.println("Coll side: " + collisionSide);
+						// System.out.println("Coll side: " + collisionSide);
 						if (!collisionSide.equals("NONE"))
 						{
 							// NOTE: draw the obstacle box hit
